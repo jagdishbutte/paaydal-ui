@@ -7,10 +7,10 @@ export default function AboutSection() {
                 {/* Text Section */}
                 <div>
                     <h2 className="text-3xl md:text-5xl font-bold text-emerald-700 mb-6">
-                        About Paaydal Trekkers
+                        About Foxtrail India Adventures
                     </h2>
                     <p className="text-stone-700 text-lg leading-relaxed mb-4">
-                        Paaydal Trekkers is a passionate community of explorers,
+                        Foxtrail India is a passionate community of explorers,
                         nature lovers, and adventure seekers. We organize
                         curated trekking experiences across India&apos;s most
                         stunning landscapes — from the Western Ghats to the
@@ -28,7 +28,8 @@ export default function AboutSection() {
                 <div className="w-full h-[300px] md:h-[400px] relative rounded-lg overflow-hidden shadow-lg">
                     <Image
                         src="/landing/about-trek.jpg"
-                        alt="About Paaydal Trekkers"
+                        alt="About Foxtrail India
+"
                         layout="fill"
                         objectFit="cover"
                         className="rounded-lg"

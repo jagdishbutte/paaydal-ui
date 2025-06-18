@@ -8,7 +8,7 @@ const testimonials = [
         name: "Anita Sharma",
         location: "Manali, HP",
         photo: "/landing/testimonials/anita.jpg", 
-        quote: "Paaydal Trekkers made my first Himalayan trek safe and unforgettable. The guides were amazing!",
+        quote: "Foxtrail made my first Himalayan trek safe and unforgettable. The guides were amazing!",
     },
     {
         name: "Rohit Deshmukh",

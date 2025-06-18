@@ -21,7 +21,7 @@ export default function HeroSection() {
     }, []);
 
     return (
-        <section className="relative h-[90vh] flex items-center justify-center text-white overflow-hidden">
+        <section className="relative h-[93vh] flex items-center justify-center text-white overflow-hidden">
             {/* Background Image */}
             <Image
                 src={heroImages[currentIndex]}
@@ -40,12 +40,10 @@ export default function HeroSection() {
                     Discover Breathtaking Treks in India
                 </h1>
                 <p className="mt-4 text-lg md:text-xl max-w-xl mx-auto drop-shadow-md">
-                    Join Paaydal Trekkers and explore the wild like never
-                    before. From serene trails to adventurous climbs, we’ve got
-                    it all.
+                    Join Foxtrail India and explore the wild like never before. From serene trails to adventurous climbs, we’ve got it all.
                 </p>
                 <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
-                    <Link href="/upcoming-treks">
+                    <Link href="/treks">
                         <button className="bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-3 rounded-full font-semibold shadow-md transition">
                             View Upcoming Treks
                         </button>
