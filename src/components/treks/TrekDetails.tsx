@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 interface Leader {
     name: string;
@@ -38,6 +39,19 @@ export interface TrekProps {
 
 export default function TrekDetails({ trek }: TrekProps) {
     const router = useRouter();
+    const carouselRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!carouselRef.current) return;
+            carouselRef.current.scrollBy({
+                left: window.innerWidth, 
+                behavior: "smooth",
+            });
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="px-4 md:px-16 py-8 space-y-8">
@@ -55,11 +69,14 @@ export default function TrekDetails({ trek }: TrekProps) {
             </div>
 
             {/* Image Carousel */}
-            <div className="flex overflow-x-auto gap-4 scrollbar-hide">
+            <div
+                ref={carouselRef}
+                className="flex overflow-x-auto gap-4 scrollbar-hide"
+            >
                 {trek.imageUrls.map((src, idx) => (
                     <div
                         key={idx}
-                        className="relative min-w-[80vw] md:min-w-[30vw] h-64 rounded-lg overflow-hidden"
+                        className="relative min-w-[80vw] md:min-w-full h-[35vh] rounded-lg overflow-hidden"
                     >
                         <Image
                             src={src}
@@ -67,7 +84,7 @@ export default function TrekDetails({ trek }: TrekProps) {
                             fill
                             className="object-cover"
                         />
-                        <div className="absolute bottom-0 bg-black/50 text-white text-sm p-2 w-full">
+                        <div className="absolute bottom-0 bg-black/50 text-white text-sm text-center p-2 w-full">
                             {trek.title} - View {idx + 1}
                         </div>
                     </div>
