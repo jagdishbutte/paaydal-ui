@@ -39,12 +39,6 @@ export const apiConnector = async (
                 if (typeof window !== "undefined") window.location.reload();
             }, 200);
         }
-        // if (error.response) {
-        // //   console.error("Error response data:", error.response.data);
-        // }
         throw error;
-
-        // const errorMessage = error?.response?.data?.error || "An error occurred";
-        // toast.error(errorMessage);
     }
 };

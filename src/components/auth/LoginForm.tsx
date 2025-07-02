@@ -3,16 +3,44 @@
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Eye, EyeOff } from "lucide-react";
+import { login } from "@/api/operations/authAPIs";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
-    const handleLogin = (e: React.FormEvent) => {
+    const setUser = useAuthStore((state) => state.setUser);
+
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Logging in with:", email, password);
-        // Replace with actual login logic (e.g., NextAuth)
+        if (!email || !password) {
+            alert("Please fill in all required fields.");
+            return;
+        }
+
+        try {
+            const response = await login(email, password);
+
+            if (response.status === 200) {
+                toast.success("Login successful!");
+                const user = response.data.user;
+                console.log("User data:", user);
+                setUser(user);
+                setTimeout(() => {
+                    router.push("/");
+                }, 500);
+            }
+        } catch (error: unknown) {
+            console.error("Login failed:", error);
+            toast.error(
+                "Please check your credentials."
+            );
+        }
     };
 
     const handleGoogleLogin = () => {
@@ -61,6 +89,12 @@ export default function LoginForm() {
                 className="w-full bg-emerald-600 text-white py-2 rounded-md hover:bg-emerald-500 font-medium transition"
             >
                 Login
+            </button>
+            <button
+                type="button"
+                onClick={() => toast.error("This is a test toast!")}
+            >
+                Show Test Toast
             </button>
 
             <div className="text-center text-sm text-gray-600">or</div>

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import { registerUser } from "@/api/operations/authAPIs";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
     const [name, setName] = useState("");
@@ -11,16 +14,33 @@ export default function RegisterForm() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [mobile, setMobile] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
-    const handleRegister = (e: React.FormEvent) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+         if (!name || !email || !mobile || !password || !confirmPassword) {
+             toast.error("Please fill in all required fields.");
+             return;
+         }
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
+            toast.error("Passwords do not match.");
             return;
         }
+        try{
+            const response = await registerUser(name, email, mobile, password);
 
-        console.log("Registering with:", { name, email, password, mobile });
-        // TODO: Replace with backend registration logic
+            if (response.status === 200) {
+                toast.success("Registration successful!");
+                setTimeout(() => {
+                    router.push("/login");
+                }, 500);
+            }
+        } catch (error: unknown) {
+            console.error("Registration failed:", error);
+            toast.error(
+                "An error occurred. Please try again."
+            );
+        }        
     };
 
     const handleGoogleRegister = () => {
