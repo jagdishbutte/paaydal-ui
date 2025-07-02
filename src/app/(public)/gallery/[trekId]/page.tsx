@@ -1,22 +1,22 @@
 import TrekGalleryPage from "@/components/gallery/TrekGalleryPage";
 import { Metadata } from "next";
 
-interface PageProps {
-    params: {
+type Props = {
+    params: Promise<{
         trekId: string;
+    }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { trekId } = await params;
+    const trekName = trekId.replace(/-/g, " ");
+    return {
+        title: `Gallery - ${trekName}`,
+        description: `Photos and memories from ${trekName} trek.`,
     };
 }
 
-export const generateMetadata = ({ params }: PageProps): Metadata => {
-    return {
-        title: `Gallery - ${params.trekId.replace(/-/g, " ")}`,
-        description: `Photos and memories from ${params.trekId.replace(
-            /-/g,
-            " "
-        )} trek.`,
-    };
-};
-
-export default function Page({ params }: PageProps) {
-    return <TrekGalleryPage trekId={params.trekId} />;
+export default async function Page({ params }: Props) {
+    const { trekId } = await params;
+    return <TrekGalleryPage trekId={trekId} />;
 }

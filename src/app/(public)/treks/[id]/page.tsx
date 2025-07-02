@@ -2,11 +2,12 @@ import TrekDetails from "@/components/treks/TrekDetails";
 import { notFound } from "next/navigation";
 import { dummyTreks } from "@/lib/dummyTreks";
 
-export default function TrekDetailsPage({
+export default async function TrekDetailsPage({
     params,
 }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }) {
+    const { id } = await params;
     // Combine all treks into one array
     const allTreks = [
         ...dummyTreks.upcomingTreks,
@@ -14,7 +15,7 @@ export default function TrekDetailsPage({
         ...dummyTreks.popularTreks,
     ];
 
-    const trek = allTreks.find((t) => String(t.id) === params.id)!;
+    const trek = allTreks.find((t) => String(t.id) === id)!;
 
     if (!trek) return notFound();
 
