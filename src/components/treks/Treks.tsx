@@ -1,14 +1,48 @@
 "use client";
 
+import { getAllTreks } from "@/api/operations/trekAPIs";
 import TrekCard from "./TrekCard";
-import { dummyTreks, Trek } from "../../lib/dummyTreks";
-
-
+import { useAuthStore } from "@/stores/authStore";
+import { useEffect, useState } from "react";
+import { Trek } from "@/lib/dummyTreks";
 
 export default function TreksPage() {
-    const upcomingTreks = dummyTreks.upcomingTreks;
-    const recentTreks = dummyTreks.recentTreks;
-    const popularTreks = dummyTreks.popularTreks;
+    const token = useAuthStore((state) => state.user?.token);
+    const [upcomingTreks, setUpcomingTreks] = useState([]);
+    const [recentTreks, setRecentTreks] = useState([]);
+    const [popularTreks, setPopularTreks] = useState([]);
+    
+    useEffect(() => {
+        if (!token) return;
+        const fetchTreks = async () => {
+            console.log("Fetching treks with token:", token);
+            if (!token) {
+                console.error("No authentication token found.");
+                return;
+            }
+            try {
+                const response = await getAllTreks(token);
+
+                const allTreks = response.data || [];
+
+                setUpcomingTreks(allTreks.filter(
+                    (t: { thisTrekIs: string; }) => t.thisTrekIs === "upcoming"
+                ));
+                setRecentTreks(allTreks.filter(
+                    (t: { thisTrekIs: string; }) => t.thisTrekIs === "recent"
+                ));
+                setPopularTreks(allTreks.filter(
+                    (t: { thisTrekIs: string; }) => t.thisTrekIs === "popular"
+                ));
+
+            } catch (error) {
+                console.error("Error fetching treks:", error);
+            }
+        };
+
+        fetchTreks();
+    }, [token]);
+
     return (
         <div className="px-4 md:px-16 py-10 space-y-12">
             {/* Upcoming Treks */}
@@ -18,7 +52,7 @@ export default function TreksPage() {
                 </h2>
                 <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
                     {upcomingTreks.map((trek: Trek) => (
-                        <TrekCard key={trek.id} {...trek} />
+                        <TrekCard key={trek._id} {...trek} />
                     ))}
                 </div>
             </section>
@@ -30,7 +64,7 @@ export default function TreksPage() {
                 </h2>
                 <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
                     {recentTreks.map((trek: Trek) => (
-                        <TrekCard key={trek.id} {...trek} />
+                        <TrekCard key={trek._id} {...trek} />
                     ))}
                 </div>
             </section>
@@ -42,7 +76,7 @@ export default function TreksPage() {
                 </h2>
                 <div className="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
                     {popularTreks.map((trek: Trek) => (
-                        <TrekCard key={trek.id} {...trek} />
+                        <TrekCard key={trek._id} {...trek} />
                     ))}
                 </div>
             </section>

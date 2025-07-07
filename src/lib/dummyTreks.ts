@@ -1,7 +1,7 @@
 // dummyTreks.ts
 
 export interface Trek {
-    id: string;
+    _id: string;
     title: string;
     thumbnail: string; 
     imageUrls: string[];
@@ -38,7 +38,7 @@ interface DummyTreks {
 export const dummyTreks: DummyTreks = {
     upcomingTreks: [
         {
-            id: "1",
+            _id: "1",
             title: "Valley of Flowers",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [
@@ -101,7 +101,7 @@ export const dummyTreks: DummyTreks = {
                 "Suitable for solo travelers, families, and adventure seekers",
         },
         {
-            id: "2",
+            _id: "2",
             title: "Hampta Pass",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [
@@ -164,7 +164,7 @@ export const dummyTreks: DummyTreks = {
                 "Suitable for solo travelers, families, and adventure seekers",
         },
         {
-            id: "3",
+            _id: "3",
             title: "Kedarkantha Trek",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [
@@ -205,7 +205,7 @@ export const dummyTreks: DummyTreks = {
 
     popularTreks: [
         {
-            id: "4",
+            _id: "4",
             title: "Kedarkantha Trek",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [
@@ -243,7 +243,7 @@ export const dummyTreks: DummyTreks = {
                 "Suitable for solo travelers, families, and adventure seekers",
         },
         {
-            id: "5",
+            _id: "5",
             title: "Hampta Pass",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [
@@ -309,7 +309,7 @@ export const dummyTreks: DummyTreks = {
 
     recentTreks: [
         {
-            id: "6",
+            _id: "6",
             title: "Valley of Flowers (May Batch)",
             thumbnail: "/treks/kedarkanth.jpg",
             imageUrls: [

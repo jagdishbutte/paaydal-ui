@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 
 type TrekCardProps = {
-    id: string;
+    _id: string;
     title: string;
     thumbnail: string;
     price: string;
@@ -15,7 +15,7 @@ type TrekCardProps = {
 };
 
 export default function TrekCard({
-    id,
+    _id,
     title,
     thumbnail,
     price,
@@ -48,7 +48,7 @@ export default function TrekCard({
                 <div className="text-sm">{formattedDate}</div>
                 <div className="text-sm font-bold">{price}</div>
                 <Link
-                    href={`/treks/${id}`}
+                    href={`/treks/${_id}`}
                     className="mt-2 self-start px-3 py-1 text-sm bg-white text-green-700 font-semibold rounded hover:bg-green-100 transition"
                 >
                     View Details

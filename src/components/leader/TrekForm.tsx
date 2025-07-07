@@ -1,9 +1,16 @@
 "use client";
 
+import { createNewTrek } from "@/api/operations/trekAPIs";
+import { useAuthStore } from "@/stores/authStore";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function TrekForm() {
-    const [form, setForm] = useState({
+    const token = useAuthStore((state) => state.user?.token);
+    // const router = useRouter();
+
+    const [formData, setFormData] = useState({
         title: "",
         thumbnail: "",
         imageUrls: [""],
@@ -43,23 +50,41 @@ export default function TrekForm() {
         if (isArray && typeof index === "number") {
             const updatedArray = [
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ...(form[field as keyof typeof form] as any[]),
+                ...(formData[field as keyof typeof formData] as any[]),
             ];
             if (subfield) {
                 updatedArray[index][subfield] = value;
             } else {
                 updatedArray[index] = value;
             }
-            setForm({ ...form, [field]: updatedArray });
+            setFormData({ ...formData, [field]: updatedArray });
         } else {
-            setForm({ ...form, [field]: value });
+            setFormData({ ...formData, [field]: value });
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Trek submitted:", form);
-        // TODO: send to backend
+
+        if (!token) {
+            toast.error("You're not authenticated!");
+            return;
+        }
+
+        try {
+            const res = await createNewTrek(formData, token);
+            console.log("Trek created successfully:", res);
+
+            // if (!res.ok) {
+            //     toast.error(data.message || "Failed to create trek");
+            // } else {
+            //     toast.success("Trek created successfully!");
+            //     router.push("/upcoming-treks");
+            // }
+        } catch (err) {
+            console.error(err);
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -72,7 +97,7 @@ export default function TrekForm() {
                 <input
                     type="text"
                     placeholder="Trek Title"
-                    value={form.title}
+                    value={formData.title}
                     onChange={(e) => handleChange("title", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
@@ -80,7 +105,7 @@ export default function TrekForm() {
                 <input
                     type="text"
                     placeholder="Thumbnail URL"
-                    value={form.thumbnail}
+                    value={formData.thumbnail}
                     onChange={(e) => handleChange("thumbnail", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
@@ -88,7 +113,7 @@ export default function TrekForm() {
                 <input
                     type="text"
                     placeholder="Price"
-                    value={form.price}
+                    value={formData.price}
                     onChange={(e) => handleChange("price", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
@@ -96,21 +121,21 @@ export default function TrekForm() {
                 <input
                     type="text"
                     placeholder="Commute"
-                    value={form.commute}
+                    value={formData.commute}
                     onChange={(e) => handleChange("commute", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
                 />
                 <input
                     type="date"
-                    value={form.startDate}
+                    value={formData.startDate}
                     onChange={(e) => handleChange("startDate", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
                 />
                 <input
                     type="date"
-                    value={form.endDate}
+                    value={formData.endDate}
                     onChange={(e) => handleChange("endDate", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
@@ -118,7 +143,7 @@ export default function TrekForm() {
                 <input
                     type="text"
                     placeholder="Difficulty (Easy/Moderate/Hard)"
-                    value={form.difficulty}
+                    value={formData.difficulty}
                     onChange={(e) => handleChange("difficulty", e.target.value)}
                     className="border p-2 rounded-md w-full"
                     required
@@ -126,7 +151,7 @@ export default function TrekForm() {
                 <input
                     type="number"
                     placeholder="Seats Available"
-                    value={form.seatsAvailable}
+                    value={formData.seatsAvailable}
                     onChange={(e) =>
                         handleChange("seatsAvailable", parseInt(e.target.value))
                     }
@@ -143,7 +168,7 @@ export default function TrekForm() {
 
             <textarea
                 placeholder="About Destination"
-                value={form.aboutDestination}
+                value={formData.aboutDestination}
                 onChange={(e) =>
                     handleChange("aboutDestination", e.target.value)
                 }
@@ -152,14 +177,14 @@ export default function TrekForm() {
             />
             <textarea
                 placeholder="Who Can Come?"
-                value={form.whoCanCome}
+                value={formData.whoCanCome}
                 onChange={(e) => handleChange("whoCanCome", e.target.value)}
                 className="border p-2 rounded-md w-full text-emerald-900"
                 required
             />
             <textarea
                 placeholder="Main Description"
-                value={form.description}
+                value={formData.description}
                 onChange={(e) => handleChange("description", e.target.value)}
                 className="border p-2 rounded-md w-full text-emerald-900"
                 required
@@ -167,7 +192,7 @@ export default function TrekForm() {
             <input
                 type="text"
                 placeholder="Suitable For"
-                value={form.suitableFor}
+                value={formData.suitableFor}
                 onChange={(e) => handleChange("suitableFor", e.target.value)}
                 className="border p-2 rounded-md w-full text-emerald-900"
             />
@@ -176,7 +201,7 @@ export default function TrekForm() {
 
             <h2 className="text-lg font-semibold text-emerald-700">Images</h2>
 
-            {form.imageUrls.map((url, i) => (
+            {formData.imageUrls.map((url, i) => (
                 <input
                     key={i}
                     type="text"
@@ -192,7 +217,7 @@ export default function TrekForm() {
             <hr />
 
             <h2 className="text-lg font-semibold text-emerald-700">Leaders</h2>
-            {form.leaders.map((leader, i) => (
+            {formData.leaders.map((leader, i) => (
                 <div
                     key={i}
                     className="grid grid-cols-1 md:grid-cols-3 gap-4 text-emerald-900"
@@ -262,7 +287,7 @@ export default function TrekForm() {
                     <label className="block font-medium text-gray-700 capitalize mt-4">
                         {field}
                     </label>
-                    {(form[field as keyof typeof form] as string[]).map(
+                    {(formData[field as keyof typeof formData] as string[]).map(
                         (val, i) => (
                             <input
                                 key={i}
