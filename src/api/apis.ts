@@ -16,3 +16,8 @@ export const userTrek = {
     GET_TREK_BY_ID: (trekId: string) => `${BASE_URL}api/user/treks/get-trek/${trekId}`,
     BOOK_TREK: (trekId: string) => `${BASE_URL}api/user/treks/book-trek/${trekId}`,
 };
+
+export const trekBookings = {
+    CREATE_BOOKING: `${BASE_URL}api/bookings/book-trek`,
+    GET_USER_BOOKINGS: `${BASE_URL}api/bookings/my-bookings`,
+};

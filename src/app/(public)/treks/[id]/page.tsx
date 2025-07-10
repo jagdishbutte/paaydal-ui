@@ -9,13 +9,14 @@ export default async function TrekDetailsPage({
 }) {
     const { id } = await params;
     // Combine all treks into one array
+    console.log("Trek ID:", id);
     const allTreks = [
         ...dummyTreks.upcomingTreks,
         ...dummyTreks.recentTreks,
         ...dummyTreks.popularTreks,
     ];
 
-    const trek = allTreks.find((t) => String(t.id) === id)!;
+    const trek = allTreks.find((t) => String(t._id) === id)!;
 
     if (!trek) return notFound();
 

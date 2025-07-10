@@ -15,7 +15,7 @@ interface Leader {
 
 export interface TrekProps {
     trek: {
-        id: string;
+        _id: string;
         title: string;
         imageUrls: string[];
         price: string;
@@ -40,6 +40,7 @@ export interface TrekProps {
 export default function TrekDetails({ trek }: TrekProps) {
     const router = useRouter();
     const carouselRef = useRef<HTMLDivElement | null>(null);
+    console.log("Trek Details:", trek);
 
     useEffect(() => {
         const interval = setInterval(() => {

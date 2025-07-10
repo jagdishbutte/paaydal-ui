@@ -15,7 +15,6 @@ export default function TreksPage() {
     useEffect(() => {
         if (!token) return;
         const fetchTreks = async () => {
-            console.log("Fetching treks with token:", token);
             if (!token) {
                 console.error("No authentication token found.");
                 return;
