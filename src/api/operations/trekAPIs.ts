@@ -75,3 +75,27 @@ export const getAllTreks = async (
         throw error;
     }
 }
+
+export const getTrekById = async (
+    token: string,
+    trekId: string,
+) => {
+    try {
+        const response = await apiConnector(
+            "GET",
+            userTrek.GET_TREK_BY_ID(trekId),
+            null,
+            {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            null,
+            "json"
+        );
+
+        return response;
+    } catch (error: unknown) {
+        console.error("❌ Failed to fetch trek by ID:", error);
+        throw error;
+    }
+}
