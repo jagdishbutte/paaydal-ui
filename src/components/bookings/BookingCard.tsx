@@ -28,12 +28,12 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
 
     const handleCancelClick = () => {
         if (confirm("Are you sure you want to cancel this booking?")) {
-            onCancel(booking._id);
+            onCancel(booking.trekId._id);
         }
     };
 
     const handleViewDetails = () => {
-        router.push(`/treks/${booking._id}`);
+        router.push(`/treks/${booking.trekId._id}`);
     };
 
     return (

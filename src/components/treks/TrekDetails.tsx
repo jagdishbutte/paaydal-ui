@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getTrekById } from "@/api/operations/trekAPIs";
+import { useAuthStore } from "@/stores/authStore";
 
 interface Leader {
     name: string;
@@ -13,46 +15,66 @@ interface Leader {
     bio?: string;
 }
 
-export interface TrekProps {
-    trek: {
-        _id: string;
-        title: string;
-        imageUrls: string[];
-        price: string;
-        startDate: string;
-        endDate: string;
-        difficulty: string;
-        seatsAvailable: number;
-        description: string;
-        commute: string;
-        stops: string[];
-        schedule: string[];
-        foodStops?: string[];
-        locationsToView?: string[];
-        aboutDestination?: string;
-        whoCanCome: string;
-        preparationTips?: string[];
-        leaders?: Leader[];
-        facilities?: string[];
-    };
+export interface Trek {
+    _id: string;
+    title: string;
+    imageUrls: string[];
+    price: string;
+    startDate: string;
+    endDate: string;
+    difficulty: string;
+    seatsAvailable: number;
+    description: string;
+    commute: string;
+    stops: string[];
+    schedule: string[];
+    foodStops?: string[];
+    locationsToView?: string[];
+    aboutDestination?: string;
+    whoCanCome: string;
+    preparationTips?: string[];
+    leaders?: Leader[];
+    facilities?: string[];
 }
 
-export default function TrekDetails({ trek }: TrekProps) {
+export default function TrekDetails({ trekId }: { trekId: string }) {
     const router = useRouter();
     const carouselRef = useRef<HTMLDivElement | null>(null);
-    console.log("Trek Details:", trek);
+    const [trek, setTrek] = useState<Trek | null>(null);
+    const [loading, setLoading] = useState(true);
+    const token = useAuthStore((state) => state.user?.token);
+
+    useEffect(() => {
+        if (!token) return;
+
+        const fetchTrek = async () => {
+            try {
+                const response = await getTrekById(token, trekId);
+                setTrek(response.data);
+                console.log("Fetched trek data:", response.data);
+            } catch (err) {
+                console.error("Error fetching trek:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTrek();
+    }, [token, trekId]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (!carouselRef.current) return;
             carouselRef.current.scrollBy({
-                left: window.innerWidth, 
+                left: window.innerWidth,
                 behavior: "smooth",
             });
         }, 5000);
 
         return () => clearInterval(interval);
     }, []);
+
+    if (loading) return <div className="p-8">Loading trek...</div>;
+    if (!trek) return <div className="p-8 text-red-600">Trek not found.</div>;
 
     return (
         <div className="px-4 md:px-16 py-8 space-y-8">
@@ -118,12 +140,14 @@ export default function TrekDetails({ trek }: TrekProps) {
                         </p>
                     </div>
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Description
-                        </h2>
-                        <p className="text-stone-700">{trek.description}</p>
-                    </div>
+                    {trek.description && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Description
+                            </h2>
+                            <p className="text-stone-700">{trek.description}</p>
+                        </div>
+                    )}
 
                     <div>
                         <h2 className="text-lg font-semibold mb-2">
@@ -150,34 +174,40 @@ export default function TrekDetails({ trek }: TrekProps) {
                         </ul>
                     </div>
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Food Stops
-                        </h2>
-                        <ul className="list-disc list-inside">
-                            {trek.foodStops?.map((stop, idx) => (
-                                <li key={idx}>{stop}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    {trek.foodStops && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Food Stops
+                            </h2>
+                            <ul className="list-disc list-inside">
+                                {trek.foodStops.map((stop, idx) => (
+                                    <li key={idx}>{stop}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Locations to View
-                        </h2>
-                        <ul className="list-disc list-inside">
-                            {trek.locationsToView?.map((loc, idx) => (
-                                <li key={idx}>{loc}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    {trek.locationsToView && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Locations to View
+                            </h2>
+                            <ul className="list-disc list-inside">
+                                {trek.locationsToView.map((loc, idx) => (
+                                    <li key={idx}>{loc}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            About Destination
-                        </h2>
-                        <p>{trek.aboutDestination}</p>
-                    </div>
+                    {trek.aboutDestination && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                About Destination
+                            </h2>
+                            <p>{trek.aboutDestination}</p>
+                        </div>
+                    )}
 
                     <div>
                         <h2 className="text-lg font-semibold mb-2">
@@ -186,59 +216,73 @@ export default function TrekDetails({ trek }: TrekProps) {
                         <p>{trek.whoCanCome}</p>
                     </div>
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Preparation Tips
-                        </h2>
-                        <p>{trek.preparationTips}</p>
-                    </div>
+                    {trek.preparationTips && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Preparation Tips
+                            </h2>
+                            <ul className="list-disc list-inside">
+                                {trek.preparationTips.map((tip, idx) => (
+                                    <li key={idx}>{tip}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
 
                 {/* Right Sidebar */}
                 <div className="md:w-1/3 space-y-6">
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Trek Leaders
-                        </h2>
-                        <div className="space-y-4">
-                            {trek.leaders?.map((leader, idx) => (
-                                <div
-                                    key={idx}
-                                    className="flex items-center gap-4 p-3 border rounded-lg"
-                                >
-                                    <Image
-                                        src={leader.photo}
-                                        alt={leader.name}
-                                        width={50}
-                                        height={50}
-                                        className="rounded-full object-cover"
-                                    />
-                                    <div>
-                                        <h3 className="font-semibold text-base">
-                                            {leader.name}
-                                        </h3>
-                                        <p className="text-xs text-stone-600">
-                                            {leader.treksLed} treks led
-                                        </p>
-                                        <p className="text-sm text-stone-700">
-                                            {leader.bio}
-                                        </p>
+                    {trek.leaders && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Trek Leaders
+                            </h2>
+                            <div className="space-y-4">
+                                {trek.leaders.map((leader, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-4 p-3 border rounded-lg"
+                                    >
+                                        <Image
+                                            src={leader.photo}
+                                            alt={leader.name}
+                                            width={50}
+                                            height={50}
+                                            className="rounded-full object-cover w-[50px] h-[50px]"
+                                        />
+                                        <div>
+                                            <h3 className="font-semibold text-base">
+                                                {leader.name}
+                                            </h3>
+                                            {leader.treksLed && (
+                                                <p className="text-xs text-stone-600">
+                                                    {leader.treksLed} treks led
+                                                </p>
+                                            )}
+                                            {leader.bio && (
+                                                <p className="text-sm text-stone-700">
+                                                    {leader.bio}
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
-                    <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Facilities Provided
-                        </h2>
-                        <ul className="list-disc list-inside">
-                            {trek.facilities?.map((facility, idx) => (
-                                <li key={idx}>{facility}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    {trek.facilities && (
+                        <div>
+                            <h2 className="text-lg font-semibold mb-2">
+                                Facilities Provided
+                            </h2>
+                            <ul className="list-disc list-inside">
+                                {trek.facilities.map((facility, idx) => (
+                                    <li key={idx}>{facility}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

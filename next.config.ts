@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
                 hostname: "t3.ftcdn.net",
                 pathname: "/**",
             },
+            {
+                protocol: "https",
+                hostname: "cdn.example.com",
+                pathname: "/**",
+            },
+            {
+                protocol: "https",
+                hostname: "media.istockphoto.com",
+                pathname: "/**",
+            },
         ],
     },
 };
