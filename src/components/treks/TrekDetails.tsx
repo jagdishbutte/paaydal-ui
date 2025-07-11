@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { getTrekById } from "@/api/operations/trekAPIs";
 import { useAuthStore } from "@/stores/authStore";
+import toast from "react-hot-toast";
+import { userTrekBooking } from "@/api/operations/bookingAPIs";
 
 interface Leader {
     name: string;
@@ -43,6 +45,36 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
     const [trek, setTrek] = useState<Trek | null>(null);
     const [loading, setLoading] = useState(true);
     const token = useAuthStore((state) => state.user?.token);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleConfirmBooking = async () => {
+        if (!token) {
+            toast.error("Please sign in to book.");
+            return;
+        }
+
+        if (!trek) {
+            toast.error("Trek details not available.");
+            return;
+        }
+
+        if (trek.seatsAvailable <= 0) {
+            toast.error("No seats available for this trek.");
+            return;
+        }
+
+        try {
+            const response = await userTrekBooking(token, trek._id, parseInt(trek.price));
+            console.log("Booking response:", response);
+            toast.success("Booking successful!");
+            setShowModal(false);
+            router.push("/my-bookings");
+        } catch (err) {
+            console.error("Booking error:", err);
+            toast.error("Booking failed. Try again later.");
+        }
+    };
+
 
     useEffect(() => {
         if (!token) return;
@@ -120,7 +152,7 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
                 <div className="flex-1 space-y-6">
                     <div className="space-y-2">
                         <p>
-                            <span className="font-semibold">Price:</span>{" "}
+                            <span className="font-semibold">Price:</span> ₹
                             {trek.price}
                         </p>
                         <p>
@@ -232,6 +264,12 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
 
                 {/* Right Sidebar */}
                 <div className="md:w-1/3 space-y-6">
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-full"
+                    >
+                        Book Now
+                    </button>
                     {trek.leaders && (
                         <div>
                             <h2 className="text-lg font-semibold mb-2">
@@ -285,6 +323,33 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
                     )}
                 </div>
             </div>
+            {showModal && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+                    <div className="bg-white rounded-lg p-6 w-[90%] max-w-sm text-center shadow-lg">
+                        <h3 className="text-lg font-semibold mb-4">
+                            Confirm Booking
+                        </h3>
+                        <p className="text-gray-700 mb-6">
+                            Are you sure you want to book this trek for ₹
+                            {trek.price}?
+                        </p>
+                        <div className="flex justify-center gap-4">
+                            <button
+                                onClick={handleConfirmBooking}
+                                className="bg-emerald-600 text-white px-4 py-2 rounded-full hover:bg-emerald-500"
+                            >
+                                Confirm
+                            </button>
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="bg-gray-300 px-4 py-2 rounded-full hover:bg-gray-200"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

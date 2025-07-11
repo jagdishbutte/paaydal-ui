@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useAuthStore } from "@/stores/authStore";
 import Image from "next/image";
@@ -7,32 +7,49 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function Navbar() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+    const profileDropdownRef = useRef<HTMLDivElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
     useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+
             if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
+                profileDropdownRef.current &&
+                !profileDropdownRef.current.contains(target) &&
+                profileDropdownOpen
             ) {
-                setDropdownOpen(false);
+                setProfileDropdownOpen(false);
             }
+
+            if (
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(target) &&
+                mobileDropdownOpen
+            ) {
+                setMobileDropdownOpen(false);
+            }
+        };
+
+        if (profileDropdownOpen || mobileDropdownOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
         }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () =>
+
+        return () => {
             document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+        };
+    }, [profileDropdownOpen, mobileDropdownOpen]); 
 
     return (
         <header className="sticky top-0 z-50 bg-white shadow-sm px-6 py-4">
             <div className="flex justify-between items-center max-w-7xl mx-auto">
                 <div
-                    className="flex items-center space-x-2 text-xl font-bold text-green-700"
+                    className="flex items-center space-x-2 text-xl font-bold text-green-700 cursor-pointer"
                     onClick={() => router.push("/")}
                 >
                     <Image
@@ -44,10 +61,13 @@ export default function Navbar() {
                     />
                     <span>Foxtrail India</span>
                 </div>
+
                 {/* Hamburger button (visible on mobile) */}
                 <div className="lg:hidden">
                     <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        onClick={() =>
+                            setMobileDropdownOpen(!mobileDropdownOpen)
+                        }
                         className="text-green-700 focus:outline-none"
                     >
                         {/* Hamburger Icon */}
@@ -87,9 +107,11 @@ export default function Navbar() {
                     ))}
 
                     {user ? (
-                        <div className="relative" ref={dropdownRef}>
+                        <div className="relative" ref={profileDropdownRef}>
                             <button
-                                onClick={() => setDropdownOpen((prev) => !prev)}
+                                onClick={() =>
+                                    setProfileDropdownOpen((prev) => !prev)
+                                }
                                 className="w-9 h-9 rounded-full bg-green-700 text-white flex items-center justify-center font-semibold focus:outline-none"
                             >
                                 {user.name
@@ -99,24 +121,30 @@ export default function Navbar() {
                                     .toUpperCase()}
                             </button>
 
-                            {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-md py-2 z-50">
+                            {profileDropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-40 bg-green-50 shadow-md rounded-md py-2 z-1000">
                                     <Link
                                         href="/profile"
                                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                        onClick={() =>
+                                            setProfileDropdownOpen(false)
+                                        }
                                     >
                                         Your Profile
                                     </Link>
                                     <Link
                                         href="/my-bookings"
                                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                        onClick={() =>
+                                            setProfileDropdownOpen(false)
+                                        }
                                     >
                                         My Bookings
                                     </Link>
                                     <button
                                         onClick={() => {
                                             logout();
-                                            setDropdownOpen(false);
+                                            setProfileDropdownOpen(false);
                                             router.push("/login");
                                         }}
                                         className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
@@ -137,36 +165,44 @@ export default function Navbar() {
                 </nav>
 
                 {/* Mobile menu */}
-                {isMenuOpen && (
-                    <div className="absolute top-full left-0 w-full max-h-[50vh] overflow-y-auto bg-white shadow-md lg:hidden z-40">
+                {mobileDropdownOpen && (
+                    <div
+                        className="absolute top-full left-0 w-full max-h-[50vh] overflow-y-auto bg-white shadow-md lg:hidden z-40"
+                        ref={mobileMenuRef}
+                    >
                         <nav className="flex flex-col space-y-4 px-6 py-4 text-sm font-medium">
                             <Link
                                 href="/"
                                 className="text-gray-800 hover:text-green-700"
+                                onClick={() => setMobileDropdownOpen(false)}
                             >
                                 Home
                             </Link>
                             <Link
                                 href="/treks"
                                 className="text-gray-800 hover:text-green-700"
+                                onClick={() => setMobileDropdownOpen(false)}
                             >
                                 Treks
                             </Link>
                             <Link
                                 href="/gallery"
                                 className="text-gray-800 hover:text-green-700"
+                                onClick={() => setMobileDropdownOpen(false)}
                             >
                                 Gallery
                             </Link>
                             <Link
                                 href="/forum"
                                 className="text-gray-800 hover:text-green-700"
+                                onClick={() => setMobileDropdownOpen(false)}
                             >
                                 Forum
                             </Link>
                             <Link
                                 href="/team"
                                 className="text-gray-800 hover:text-green-700"
+                                onClick={() => setMobileDropdownOpen(false)}
                             >
                                 Team
                             </Link>
@@ -174,6 +210,7 @@ export default function Navbar() {
                                 <Link
                                     href="/"
                                     className="flex items-center text-gray-800 hover:text-green-700"
+                                    onClick={() => setMobileDropdownOpen(false)}
                                 >
                                     Account
                                 </Link>
@@ -181,6 +218,7 @@ export default function Navbar() {
                                 <Link
                                     href="/login"
                                     className="text-green-700 font-semibold"
+                                    onClick={() => setMobileDropdownOpen(false)}
                                 >
                                     Login
                                 </Link>

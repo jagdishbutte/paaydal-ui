@@ -42,7 +42,7 @@ export default function ForumPage() {
     };
 
     return (
-        <main className="min-h-screen bg-white py-6 px-4 md:px-10">
+        <main className="min-h-screen bg-white py-6 px-4 md:px-44">
             <h1 className="text-2xl md:text-3xl font-bold text-emerald-800 mb-6">
                 Community Forum
             </h1>

@@ -59,7 +59,7 @@ export default function MyBookingsPage() {
     };
 
     return (
-        <main className="min-h-screen bg-gray-50 py-8 px-4 md:px-10">
+        <main className="min-h-screen bg-gray-50 py-8 px-4 md:px-44">
             <h1 className="text-2xl md:text-3xl font-bold text-emerald-800 mb-6">
                 My Bookings
             </h1>

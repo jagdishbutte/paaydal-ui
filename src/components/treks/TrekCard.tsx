@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import toast from "react-hot-toast";
 import { userTrekBooking } from "@/api/operations/bookingAPIs";
+import { useRouter } from "next/navigation";
 
 type TrekCardProps = {
     _id: string;
@@ -32,6 +33,7 @@ export default function TrekCard({
         new Date(endDate),
         "dd MMM yyyy"
     )}`;
+    const router = useRouter();
     const [showModal, setShowModal] = useState(false);
     const token = useAuthStore((state) => state.user?.token);
 
@@ -51,7 +53,7 @@ export default function TrekCard({
             console.log("Booking response:", response);
             toast.success("Booking successful!");
             setShowModal(false);
-            // router.push("/my-bookings"); // if this route exists
+            router.push("/my-bookings"); // if this route exists
         } catch (err) {
             console.error("Booking error:", err);
             toast.error("Booking failed. Try again later.");
@@ -76,8 +78,8 @@ export default function TrekCard({
                 </p>
 
                 <div className="text-sm">{formattedDate}</div>
-                <div className="text-sm font-bold">{price}</div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-2">
+                <div className="text-sm font-bold">₹{price}</div>
+                <div className="flex sm:flex-row sm:items-center justify-between mt-2">
                     <Link
                         href={`/treks/${_id}`}
                         onClick={() => {

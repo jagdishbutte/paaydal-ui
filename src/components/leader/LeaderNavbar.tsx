@@ -9,7 +9,7 @@ export default function LeaderNavbar() {
                 <span className="text-xl font-bold">Paaydal Leader</span>
             </Link>
             <div className="flex gap-4">
-                <Link href="/create-trek" className="hover:underline">
+                <Link href="/leader/create-trek" className="hover:underline">
                     Create Trek
                 </Link>
                 <Link href="/logout" className="hover:underline">

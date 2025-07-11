@@ -43,7 +43,7 @@ export default function TreksPage() {
     }, [token]);
 
     return (
-        <div className="px-4 md:px-16 py-10 space-y-12">
+        <div className="px-4 md:px-44 py-10 space-y-12">
             {/* Upcoming Treks */}
             <section>
                 <h2 className="text-2xl font-bold mb-4 text-green-700">
