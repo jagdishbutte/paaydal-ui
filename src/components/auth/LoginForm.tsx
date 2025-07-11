@@ -29,11 +29,19 @@ export default function LoginForm() {
             if (response.status === 200) {
                 toast.success("Login successful!");
                 const user = response.data.user;
-                console.log("User data:", user);
+                // console.log("User data:", user);
+
                 setUser(user);
+                
                 setTimeout(() => {
-                    router.push("/");
-                }, 500);
+                    if (user.role === "leader") {
+                        router.push("/leader");
+                    } else if (user.role === "admin") {
+                        router.push("/admin");
+                    } else {
+                        router.push("/");
+                    }
+                }, 100);
             }
         } catch (error: unknown) {
             console.error("Login failed:", error);
@@ -89,12 +97,6 @@ export default function LoginForm() {
                 className="w-full bg-emerald-600 text-white py-2 rounded-md hover:bg-emerald-500 font-medium transition"
             >
                 Login
-            </button>
-            <button
-                type="button"
-                onClick={() => toast.error("This is a test toast!")}
-            >
-                Show Test Toast
             </button>
 
             <div className="text-center text-sm text-gray-600">or</div>

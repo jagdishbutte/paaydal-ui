@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "@/stores/authStore";
 
-export default function LeaderNavbar() {
+export default function AdminNavbar() {
     const user = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -35,16 +35,16 @@ export default function LeaderNavbar() {
     }, [profileDropdownOpen]);
 
     return (
-        <nav className="bg-emerald-700 text-white py-4 px-6 shadow-md flex justify-between items-center">
-            <Link href="/leader">
-                <span className="text-xl font-bold">Paaydal Leader</span>
+        <nav className="bg-purple-600 text-white py-4 px-6 shadow-md flex justify-between items-center">
+            <Link href="/admin">
+                <span className="text-xl font-bold">Paaydal Admin</span>
             </Link>
 
             {user ? (
                 <div className="relative" ref={profileDropdownRef}>
                     <button
                         onClick={() => setProfileDropdownOpen((prev) => !prev)}
-                        className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-semibold focus:outline-none hover:bg-emerald-500 transition-colors"
+                        className="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center font-semibold focus:outline-none hover:bg-green-500 transition-colors"
                     >
                         {user.name
                             .split(" ")
@@ -62,14 +62,14 @@ export default function LeaderNavbar() {
                                 </p>
                             </div>
                             <Link
-                                href="/leader/profile"
+                                href="/admin/profile"
                                 className="block px-4 py-2 hover:bg-gray-100 transition-colors"
                                 onClick={() => setProfileDropdownOpen(false)}
                             >
                                 Your Profile
                             </Link>
                             <Link
-                                href="/leader/settings"
+                                href="/admin/settings"
                                 className="block px-4 py-2 hover:bg-gray-100 transition-colors"
                                 onClick={() => setProfileDropdownOpen(false)}
                             >
