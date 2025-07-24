@@ -54,7 +54,7 @@ export default function HeroSection() {
                 <div className="mb-4">
                     <div className="inline-block">
                         <span className="text-sm font-medium tracking-widest text-emerald-300 uppercase mb-2 block animate-fade-in-up">
-                            Adventure Awaits...
+                            From Sahyadri&apos;s to Himalayas
                         </span>
                         <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-gradient-to-r from-white via-emerald-100 to-emerald-200 bg-clip-text text-transparent drop-shadow-2xl animate-fade-in-up delay-300">
                             Discover

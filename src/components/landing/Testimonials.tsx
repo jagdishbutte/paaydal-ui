@@ -45,7 +45,7 @@ export default function Testimonials() {
     const { name, location, photo, quote } = testimonials[index];
 
     return (
-        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-12 sm:py-16 lg:py-20 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-6 sm:py-8 lg:py-10 overflow-hidden">
             {" "}
             {/* Reduced py */}
             {/* Background Elements */}
@@ -73,7 +73,7 @@ export default function Testimonials() {
                 </div>
 
                 {/* Testimonial Card with Navigation Wrapper */}
-                <div className="flex items-center justify-between gap-4 sm:gap-6 lg:gap-8">
+                <div className="flex items-center justify-between gap-4 sm:gap-6 lg:gap-6">
                     {" "}
                     {/* Flex container for layout */}
                     {/* Previous Button */}
@@ -98,13 +98,9 @@ export default function Testimonials() {
                         </svg>
                     </button>
                     {/* Testimonial Card */}
-                    <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-6 sm:p-8 lg:p-10 shadow-xl border border-emerald-100/50 animate-fade-in-up delay-200 w-full">
-                        {" "}
-                        {/* Reduced p, added w-full */}
-                        <div className="flex flex-col items-center space-y-2 sm:space-y-2">
-                            {" "}
-                            {/* Reduced space-y */}
-                            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden shadow-lg border-2 border-emerald-300 group">
+                    <div className="relative bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-4 lg:p-8 shadow-xl border border-emerald-100/50 animate-fade-in-up delay-200 w-full sm:w-[120%]">
+                        <div className="flex flex-col items-center space-y-5 sm:space-y-6 md:flex-row md:items-start md:space-x-8 md:space-y-0 text-left">
+                            <div className="relative flex-shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden shadow-lg border-2 border-emerald-300 group">
                                 <Image
                                     width={128}
                                     height={128}
@@ -115,20 +111,21 @@ export default function Testimonials() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/10 via-transparent to-transparent"></div>
                             </div>
-                            {/* Quote */}
-                            <p
-                                key={animationKey}
-                                className="text-gray-700 italic text-lg sm:text-xl max-w-xl leading-relaxed animate-fade-in"
-                            >
-                                “{quote}”
-                            </p>
-                            {/* Name and Location */}
-                            <p className="font-semibold text-lg sm:text-xl bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
-                                {name}
-                            </p>
-                            <p className="text-gray-600 text-sm sm:text-base font-light">
-                                {location}
-                            </p>
+
+                            <div className="flex flex-col items-center md:items-start space-y-2 sm:space-y-2 flex-grow">
+                                <p
+                                    key={animationKey}
+                                    className="text-gray-700 italic text-lg sm:text-xl max-w-xl leading-relaxed animate-fade-in text-center md:text-left"
+                                >
+                                    “{quote}”
+                                </p>
+                                <p className="font-semibold text-lg sm:text-xl bg-gradient-to-r from-emerald-700 to-teal-600 bg-clip-text text-transparent">
+                                    {name}
+                                </p>
+                                <p className="text-gray-600 text-sm sm:text-base font-light">
+                                    {location}
+                                </p>
+                            </div>
                         </div>
                     </div>
                     {/* Next Button */}

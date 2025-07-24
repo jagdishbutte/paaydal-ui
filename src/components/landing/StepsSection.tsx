@@ -33,7 +33,7 @@ export default function StepsSection() {
     ];
 
     return (
-        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-16 sm:py-20 lg:py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-16 sm:py-10 lg:py-12 overflow-hidden">
             {/* Background Elements - Similar to AboutSection */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-1/4 left-1/6 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>

@@ -53,7 +53,7 @@ export default function UpcomingTreks() {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Enhanced Header */}
-                <div className="mb-12 sm:mb-16 lg:mb-20 text-center animate-fade-in-up">
+                <div className="mb-12 sm:mb-16 lg:mb-10 text-center animate-fade-in-up">
                     <div className="inline-block">
                         <span className="text-sm font-medium tracking-widest text-emerald-600 uppercase mb-3 block">
                             Your Next Journey
@@ -169,7 +169,7 @@ export default function UpcomingTreks() {
                     <div className="animate-fade-in-up delay-300">
                         {/* Trek count indicator */}
                         <div className="flex justify-center mb-8">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium">
+                            <div className="inline-flex items-center gap-2 px-4 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium">
                                 <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                                 {upcomingTreks.length} Adventure
                                 {upcomingTreks.length !== 1 ? "s" : ""}{" "}

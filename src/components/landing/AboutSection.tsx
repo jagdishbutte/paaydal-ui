@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function AboutSection() {
     return (
-        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-16 sm:py-20 lg:py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 py-16 sm:py-20 lg:py-10 overflow-hidden">
             {/* Background Elements */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-1/4 left-1/6 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>
@@ -20,10 +20,11 @@ export default function AboutSection() {
 
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 items-center">
-                    {/* Enhanced Text Section */}
                     <div className="order-2 lg:order-1 animate-fade-in-up">
                         {/* Section Label */}
-                        <div className="mb-6">
+                        <div className="mb-6 text-center md:text-left">
+                            {" "}
+                            {/* Added text-center for label on mobile */}
                             <span className="inline-block text-sm font-medium tracking-widest text-emerald-600 uppercase mb-4 animate-fade-in-up">
                                 Our Story
                             </span>
@@ -37,8 +38,10 @@ export default function AboutSection() {
                             </h2>
                         </div>
 
-                        {/* Enhanced Content */}
-                        <div className="space-y-6 animate-fade-in-up delay-400">
+                        {/* Content paragraphs - already wide enough, centered by parent's text-align if applied */}
+                        <div className="space-y-6 animate-fade-in-up delay-400 text-center md:text-left">
+                            {" "}
+                            {/* Added text-center */}
                             <p className="text-gray-700 text-lg sm:text-xl leading-relaxed font-light">
                                 Foxtrail India is a passionate community of
                                 <span className="font-semibold text-emerald-700">
@@ -55,7 +58,6 @@ export default function AboutSection() {
                                 </span>
                                 .
                             </p>
-
                             <p className="text-gray-700 text-lg leading-relaxed font-light">
                                 Our mission is to make trekking
                                 <span className="font-semibold text-emerald-700">
@@ -72,9 +74,11 @@ export default function AboutSection() {
                             </p>
                         </div>
 
-                        {/* Enhanced Key Highlights */}
+                        {/* Key Highlights - This needs centering for its grid items */}
                         <div className="mt-10 animate-fade-in-up delay-600">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-items-center sm:justify-items-start">
+                                {" "}
+                                {/* Added justify-items-center for grid items */}
                                 {[
                                     {
                                         icon: "🏔️",
@@ -120,9 +124,11 @@ export default function AboutSection() {
                             </div>
                         </div>
 
-                        {/* Trust Stats */}
+                        {/* Trust Stats - Already centered by text-center/flex wrap */}
                         <div className="mt-10 animate-fade-in-up delay-800">
-                            <div className="flex flex-wrap gap-8 justify-start">
+                            <div className="flex flex-wrap gap-8 justify-center sm:justify-start">
+                                {" "}
+                                {/* Changed to justify-center for mobile */}
                                 {[
                                     { number: "500+", label: "Happy Trekkers" },
                                     { number: "50+", label: "Destinations" },
@@ -143,7 +149,7 @@ export default function AboutSection() {
                             </div>
                         </div>
 
-                        {/* Call to Action */}
+                        {/* Call to Action - Already centered for mobile, left for desktop */}
                         <div className="mt-10 flex justify-center md:justify-start animate-fade-in-up delay-1000">
                             <button className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
                                 <span className="relative z-10 flex items-center gap-2">
@@ -173,7 +179,7 @@ export default function AboutSection() {
                             {/* Main Image Container */}
                             <div className="relative w-full h-80 sm:h-96 lg:h-[28rem] xl:h-[32rem] rounded-2xl overflow-hidden shadow-2xl group">
                                 <Image
-                                    src="/landing/about-trek.jpg"
+                                    src="/landing/about-trek-1.jpg"
                                     alt="About Foxtrail India Adventures - Trekkers exploring beautiful mountain landscapes"
                                     fill
                                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
