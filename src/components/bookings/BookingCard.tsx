@@ -1,9 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 // import { toast } from "react-hot-toast";
-import { X, Eye } from "lucide-react";
+import {
+    X,
+    Eye,
+    Calendar,
+    IndianRupee,
+    CreditCard,
+    AlertCircle,
+    CheckCircle,
+    Clock,
+} from "lucide-react";
 
 interface BookingCardProps {
     booking: {
@@ -23,12 +34,71 @@ interface BookingCardProps {
     onCancel: (bookingId: string) => void;
 }
 
+const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+        case "confirmed":
+        case "paid":
+            return "from-green-400 to-emerald-500";
+        case "pending":
+        case "processing":
+            return "from-yellow-400 to-orange-500";
+        case "cancelled":
+        case "failed":
+            return "from-red-400 to-red-600";
+        default:
+            return "from-gray-400 to-gray-600";
+    }
+};
+
+const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+        case "confirmed":
+        case "paid":
+            return <CheckCircle className="w-3 h-3" />;
+        case "pending":
+        case "processing":
+            return <Clock className="w-3 h-3" />;
+        case "cancelled":
+        case "failed":
+            return <AlertCircle className="w-3 h-3" />;
+        default:
+            return <AlertCircle className="w-3 h-3" />;
+    }
+};
+
+const getPaymentStatusColor = (paymentStatus: string) => {
+    switch (paymentStatus.toLowerCase()) {
+        case "paid":
+        case "completed":
+            return "text-emerald-600 bg-emerald-50";
+        case "pending":
+            return "text-yellow-600 bg-yellow-50";
+        case "failed":
+        case "cancelled":
+            return "text-red-600 bg-red-50";
+        default:
+            return "text-gray-600 bg-gray-50";
+    }
+};
+
 export default function BookingCard({ booking, onCancel }: BookingCardProps) {
+    const [showCancelModal, setShowCancelModal] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
     const router = useRouter();
 
     const handleCancelClick = () => {
-        if (confirm("Are you sure you want to cancel this booking?")) {
-            onCancel(booking.trekId._id);
+        setShowCancelModal(true);
+    };
+
+    const handleConfirmCancel = async () => {
+        setIsCancelling(true);
+        try {
+            await onCancel(booking.trekId._id);
+            setShowCancelModal(false);
+        } catch (error) {
+            console.error("Cancel error:", error);
+        } finally {
+            setIsCancelling(false);
         }
     };
 
@@ -36,54 +106,256 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
         router.push(`/treks/${booking.trekId._id}`);
     };
 
+    const formattedTrekDate = format(
+        new Date(booking.trekId.startDate),
+        "dd MMM yyyy"
+    );
+    const formattedBookingDate = format(
+        new Date(booking.createdAt),
+        "dd MMM yyyy"
+    );
+
     return (
-        <div className="border rounded-xl overflow-hidden shadow-md bg-white hover:shadow-lg transition">
-            <Image
-                src={booking.trekId.thumbnail}
-                alt={booking.trekId.title}
-                width={600}
-                height={300}
-                className="w-full h-48 object-cover"
-            />
+        <>
+            <div className="group relative w-full rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white">
+                {/* Image Container */}
+                <div className="relative h-48 overflow-hidden">
+                    <Image
+                        src={booking.trekId.thumbnail}
+                        alt={booking.trekId.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
 
-            <div className="p-4 space-y-2">
-                <h3 className="text-lg font-semibold text-emerald-700">
-                    {booking.trekId.title}
-                </h3>
-                <p className="text-sm text-gray-600">
-                    <span className="font-medium">Trek Date:</span>{" "}
-                    {new Date(booking.trekId.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-gray-600">
-                    <span className="font-medium">Amount Paid:</span> ₹
-                    {booking.amountPaid}
-                </p>
-                <p className="text-sm text-gray-600">
-                    <span className="font-medium">Payment:</span>{" "}
-                    {booking.paymentStatus}
-                </p>
-                <p className="text-sm text-gray-600">
-                    <span className="font-medium">Status:</span>{" "}
-                    {booking.status}
-                </p>
+                    {/* Enhanced Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/70 transition-all duration-300" />
 
-                <div className="flex gap-3 pt-3">
-                    <button
-                        onClick={handleViewDetails}
-                        className="flex items-center gap-1 bg-yellow-400 hover:bg-yellow-300 text-black px-4 py-2 rounded-full text-sm font-medium transition"
-                    >
-                        <Eye className="w-4 h-4" />
-                        View Details
-                    </button>
-                    <button
-                        onClick={handleCancelClick}
-                        className="flex items-center gap-1 bg-red-500 hover:bg-red-400 text-white px-4 py-2 rounded-full text-sm font-medium transition"
-                    >
-                        <X className="w-4 h-4" />
-                        Cancel Booking
-                    </button>
+                    {/* Subtle shine effect on hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                 </div>
+
+                {/* Status Badge */}
+                <div className="absolute top-4 left-4 z-20">
+                    <div
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getStatusColor(
+                            booking.status
+                        )} shadow-lg backdrop-blur-sm border border-white/20`}
+                    >
+                        {getStatusIcon(booking.status)}
+                        <span className="capitalize">{booking.status}</span>
+                    </div>
+                </div>
+
+                {/* Amount Badge */}
+                <div className="absolute top-4 right-4 z-20">
+                    <div className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold rounded-full shadow-lg backdrop-blur-sm border border-white/20">
+                        ₹{booking.amountPaid.toLocaleString()}
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 space-y-4">
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-emerald-700 transition-colors duration-300">
+                        {booking.trekId.title}
+                    </h3>
+
+                    {/* Details Grid */}
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* Trek Date */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Calendar className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    Trek Date
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    {formattedTrekDate}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Amount */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <IndianRupee className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    Amount Paid
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    ₹{booking.amountPaid.toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Payment Status */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <CreditCard className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    Payment
+                                </div>
+                                <div
+                                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(
+                                        booking.paymentStatus
+                                    )}`}
+                                >
+                                    {booking.paymentStatus}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Booking Date */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Clock className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    Booked On
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    {formattedBookingDate}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-3 pt-4">
+                        <button
+                            onClick={handleViewDetails}
+                            className="group/btn flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                        >
+                            <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                            <span>View Details</span>
+                        </button>
+
+                        {booking.status.toLowerCase() !== "cancelled" && (
+                            <button
+                                onClick={handleCancelClick}
+                                className="group/btn flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                            >
+                                <X className="w-4 h-4 group-hover/btn:rotate-90 transition-transform duration-300" />
+                                <span>Cancel</span>
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Hover effect border */}
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-400/50 transition-all duration-300" />
             </div>
-        </div>
+
+            {/* Enhanced Cancel Confirmation Modal */}
+            {showCancelModal && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white rounded-2xl p-8 w-full max-w-md text-center shadow-2xl transform animate-scale-in border border-gray-100">
+                        {/* Modal Header */}
+                        <div className="mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                <AlertCircle className="w-8 h-8 text-red-600" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                                Cancel Booking?
+                            </h3>
+                            <p className="text-gray-600">
+                                Are you sure you want to cancel this trek
+                                booking?
+                            </p>
+                        </div>
+
+                        {/* Booking Details */}
+                        <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-4 mb-6 border border-red-100">
+                            <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">
+                                {booking.trekId.title}
+                            </h4>
+                            <div className="grid grid-cols-2 gap-3 text-sm">
+                                <div className="text-center">
+                                    <div className="text-gray-500 text-xs">
+                                        Trek Date
+                                    </div>
+                                    <div className="font-semibold text-gray-900">
+                                        {formattedTrekDate}
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="text-gray-500 text-xs">
+                                        Amount
+                                    </div>
+                                    <div className="font-semibold text-red-600">
+                                        ₹{booking.amountPaid.toLocaleString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Warning Notice */}
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6">
+                            <p className="text-amber-800 text-sm font-medium">
+                                ⚠️ Cancellation may incur charges as per our
+                                policy
+                            </p>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => setShowCancelModal(false)}
+                                disabled={isCancelling}
+                                className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50"
+                            >
+                                Keep Booking
+                            </button>
+                            <button
+                                onClick={handleConfirmCancel}
+                                disabled={isCancelling}
+                                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none flex items-center justify-center gap-2"
+                            >
+                                {isCancelling ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        <span>Cancelling...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <X className="w-4 h-4" />
+                                        <span>Yes, Cancel</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style jsx>{`
+                @keyframes fade-in {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes scale-in {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.9) translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                    }
+                }
+
+                .animate-fade-in {
+                    animation: fade-in 0.3s ease-out;
+                }
+
+                .animate-scale-in {
+                    animation: scale-in 0.3s ease-out;
+                }
+            `}</style>
+        </>
     );
 }
