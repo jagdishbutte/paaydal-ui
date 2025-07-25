@@ -4,10 +4,10 @@ import Image from "next/image";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuthStore } from "@/stores/authStore";
-import toast from "react-hot-toast";
-import { userTrekBooking } from "@/api/operations/bookingAPIs";
+// import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
+import { Mountain } from "lucide-react";
+import Modal from "../common/Modal";
 
 type TrekCardProps = {
     _id: string;
@@ -95,29 +95,7 @@ export default function TrekCard({
     )}`;
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
-    const [isBooking, setIsBooking] = useState(false);
-    const token = useAuthStore((state) => state.user?.token);
-
-    const handleConfirmBooking = async () => {
-        if (!token) {
-            toast.error("Please sign in to book.");
-            return;
-        }
-
-        setIsBooking(true);
-        try {
-            const response = await userTrekBooking(token, _id, parseInt(price));
-            console.log("Booking response:", response);
-            toast.success("Booking successful!");
-            setShowModal(false);
-            router.push("/my-bookings"); // if this route exists
-        } catch (err) {
-            console.error("Booking error:", err);
-            toast.error("Booking failed. Try again later.");
-        } finally {
-            setIsBooking(false);
-        }
-    };
+    // const token = useAuthStore((state) => state.user?.token);
 
     return (
         <>
@@ -233,92 +211,70 @@ export default function TrekCard({
                 <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-400/50 transition-all duration-300" />
             </div>
 
-            {/* Enhanced Modal */}
+            {/* Booking Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white rounded-2xl p-8 w-full max-w-md text-center shadow-2xl transform animate-scale-in border border-gray-100">
-                        {/* Modal Header */}
-                        <div className="mb-6">
-                            <div className="w-16 h-16 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <svg
-                                    className="w-8 h-8 text-emerald-600"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                Confirm Booking
-                            </h3>
-                            <p className="text-gray-600">
-                                You&apos;re about to book an amazing adventure!
-                            </p>
+                <Modal onClose={() => setShowModal(false)}>
+                    <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Mountain className="w-8 h-8 text-white" />
                         </div>
-
-                        {/* Trek Details */}
-                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-4 mb-6 border border-emerald-100">
-                            <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                            Ready for Your Adventure?
+                        </h3>
+                        <p className="text-gray-600">
+                            Let&apos;s get you booked for{" "}
+                            <span className="font-semibold text-emerald-600">
                                 {title}
-                            </h4>
-                            <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
-                                <span>{formattedDate}</span>
-                                <span className="capitalize px-2 py-1 bg-white rounded-full text-xs font-medium">
-                                    {difficulty}
-                                </span>
-                            </div>
-                            <div className="text-2xl font-bold text-emerald-700">
-                                ₹{parseInt(price).toLocaleString()}
-                            </div>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => setShowModal(false)}
-                                disabled={isBooking}
-                                className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleConfirmBooking}
-                                disabled={isBooking}
-                                className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none flex items-center justify-center gap-2"
-                            >
-                                {isBooking ? (
-                                    <>
-                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                        <span>Booking...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg
-                                            className="w-4 h-4"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M5 13l4 4L19 7"
-                                            />
-                                        </svg>
-                                        <span>Confirm</span>
-                                    </>
-                                )}
-                            </button>
-                        </div>
+                            </span>
+                        </p>
                     </div>
-                </div>
+
+                    <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                        <div className="flex justify-center gap-2 items-center mb-2">
+                            <span className="text-gray-700">
+                                Starting Price:
+                            </span>
+                            <span className="text-xl font-bold text-emerald-600">
+                                ₹{price}
+                            </span>
+                        </div>
+                        <p className="text-sm text-gray-500 text-center">
+                            Final price will be calculated based on group size
+                        </p>
+                    </div>
+
+                    <div className="space-y-3">
+                        <button
+                            onClick={() => {
+                                setShowModal(false);
+                                router.push(`/checkout/${_id}`);
+                            }}
+                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
+                            Proceed to Checkout
+                            <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
+                            </svg>
+                        </button>
+
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold transition-all duration-300"
+                        >
+                            Maybe Later
+                        </button>
+                    </div>
+                </Modal>
             )}
 
             <style jsx>{`

@@ -15,8 +15,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getTrekById } from "@/api/operations/trekAPIs";
 import { useAuthStore } from "@/stores/authStore";
-import toast from "react-hot-toast";
-import { userTrekBooking } from "@/api/operations/bookingAPIs";
+// import toast from "react-hot-toast";
+// import { userTrekBooking } from "@/api/operations/bookingAPIs";
 
 interface Leader {
     name: string;
@@ -57,37 +57,6 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
     const token = useAuthStore((state) => state.user?.token);
     const [showModal, setShowModal] = useState(false);
 
-    const handleConfirmBooking = async () => {
-        if (!token) {
-            toast.error("Please sign in to book.");
-            return;
-        }
-
-        if (!trek) {
-            toast.error("Trek details not available.");
-            return;
-        }
-
-        if (trek.seatsAvailable <= 0) {
-            toast.error("No seats available for this trek.");
-            return;
-        }
-
-        try {
-            const response = await userTrekBooking(
-                token,
-                trek._id,
-                parseInt(trek.price)
-            );
-            console.log("Booking response:", response);
-            toast.success("Booking successful!");
-            setShowModal(false);
-            router.push("/my-bookings");
-        } catch (err) {
-            console.error("Booking error:", err);
-            toast.error("Booking failed. Try again later.");
-        }
-    };
 
     useEffect(() => {
         if (!token) return;
@@ -571,44 +540,67 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-2xl animate-scale-up">
                         <div className="text-center mb-6">
-                            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Mountain className="w-8 h-8 text-white" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                                Confirm Your Adventure
+                                Ready for Your Adventure?
                             </h3>
                             <p className="text-gray-600">
-                                Ready to embark on{" "}
-                                <span className="font-semibold">
+                                Let&apos;s get you booked for{" "}
+                                <span className="font-semibold text-emerald-600">
                                     {trek.title}
                                 </span>
-                                ?
                             </p>
                         </div>
 
-                        <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-4 mb-6">
-                            <div className="flex justify-between items-center">
+                        <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                            <div className="flex justify-center gap-2 items-center mb-2">
                                 <span className="text-gray-700">
-                                    Total Amount:
+                                    Starting Price:
                                 </span>
-                                <span className="text-2xl font-bold text-emerald-600">
+                                <span className="text-xl font-bold text-emerald-600">
                                     ₹{trek.price}
                                 </span>
                             </div>
+                            <p className="text-sm text-gray-500 text-center">
+                                Final price will be calculated based on group
+                                size
+                            </p>
                         </div>
 
-                        <div className="flex space-x-4">
+                        <div className="space-y-3">
                             <button
-                                onClick={handleConfirmBooking}
-                                className="flex-1 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
+                                onClick={() => {
+                                    // Close modal first
+                                    setShowModal(false);
+
+                                    // Redirect to checkout page with trek ID
+                                    router.push(`/checkout/${trek._id}`);
+                                }}
+                                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
                             >
-                                Confirm Booking
+                                Proceed to Checkout
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                    />
+                                </svg>
                             </button>
+
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold transition-all duration-300"
+                                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold transition-all duration-300"
                             >
-                                Cancel
+                                Maybe Later
                             </button>
                         </div>
                     </div>

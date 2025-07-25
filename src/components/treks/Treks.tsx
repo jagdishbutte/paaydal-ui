@@ -19,8 +19,6 @@ type Trek = {
 export default function TreksPage() {
     const token = useAuthStore((state) => state.user?.token);
     const [upcomingTreks, setUpcomingTreks] = useState<Trek[]>([]);
-    const [recentTreks, setRecentTreks] = useState<Trek[]>([]);
-    const [popularTreks, setPopularTreks] = useState<Trek[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -39,17 +37,6 @@ export default function TreksPage() {
                     allTreks.filter(
                         (t: { thisTrekIs: string }) =>
                             t.thisTrekIs === "upcoming"
-                    )
-                );
-                setRecentTreks(
-                    allTreks.filter(
-                        (t: { thisTrekIs: string }) => t.thisTrekIs === "recent"
-                    )
-                );
-                setPopularTreks(
-                    allTreks.filter(
-                        (t: { thisTrekIs: string }) =>
-                            t.thisTrekIs === "popular"
                     )
                 );
             } catch (error) {
@@ -230,78 +217,8 @@ export default function TreksPage() {
                 </div>
             </section>
 
-            {/* Recent Treks */}
-            <section className="py-16 lg:py-20 bg-gradient-to-r from-emerald-50/30 via-white to-teal-50/30">
-                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <SectionHeader
-                        title="Recent Treks"
-                        subtitle="Relive the amazing moments from our recently completed adventures"
-                        delay={200}
-                    />
-
-                    {recentTreks.length === 0 ? (
-                        <EmptyState
-                            title="No recent treks at the moment"
-                            subtitle="Our recent adventures will appear here. Stay tuned for updates!"
-                            delay={400}
-                        />
-                    ) : (
-                        <div className="grid gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                            {recentTreks.map((trek, index) => (
-                                <div
-                                    key={trek._id}
-                                    className="animate-fade-in-up"
-                                    style={{
-                                        animationDelay: `${
-                                            400 + index * 100
-                                        }ms`,
-                                    }}
-                                >
-                                    <TrekCard {...trek} />
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </section>
-
-            {/* Popular Treks */}
-            <section className="py-16 lg:py-20">
-                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <SectionHeader
-                        title="Popular Treks"
-                        subtitle="Discover the most loved treks by our community of adventurers"
-                        delay={200}
-                    />
-
-                    {popularTreks.length === 0 ? (
-                        <EmptyState
-                            title="No popular treks at the moment"
-                            subtitle="Popular treks chosen by our community will be showcased here soon!"
-                            delay={400}
-                        />
-                    ) : (
-                        <div className="grid gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                            {popularTreks.map((trek, index) => (
-                                <div
-                                    key={trek._id}
-                                    className="animate-fade-in-up"
-                                    style={{
-                                        animationDelay: `${
-                                            400 + index * 100
-                                        }ms`,
-                                    }}
-                                >
-                                    <TrekCard {...trek} />
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </section>
-
             {/* Call to Action */}
-            <section className="py-16 lg:py-20 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 relative overflow-hidden">
+            <section className="py-16 lg:py-20 mt-4 bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 relative overflow-hidden">
                 {/* Background decorations */}
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-0 w-40 h-40 bg-white rounded-full blur-3xl"></div>
