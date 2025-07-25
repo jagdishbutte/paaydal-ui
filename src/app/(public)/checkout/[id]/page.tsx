@@ -1,12 +1,12 @@
 import CheckoutPage from '@/components/checkout/CheckOutPage'
 import React from 'react'
 
-function page() {
-  return (
-    <div>
-        <CheckoutPage />
-    </div>
-  )
-}
+type Props = {
+    params: {
+        id: string;
+    };
+};
 
-export default page
+export default function Page({ params }: Props) {
+    return <CheckoutPage trekId={params.id} />;
+}
