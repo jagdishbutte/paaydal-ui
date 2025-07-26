@@ -96,18 +96,31 @@ export default function CheckoutPage({ trekId }: { trekId: string }) {
                                         <h4 className="text-lg font-semibold text-gray-900 mb-2">
                                             {trekDetails.title}
                                         </h4>
-                                        <p className="text-gray-600 text-sm leading-relaxed">
+                                        <p className="text-gray-600 text-sm leading-relaxed mb-3">
                                             {trekDetails.description}
                                         </p>
+                                        <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                            {trekDetails.difficulty}
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-4 mb-4">
-                                    <span className="text-gray-600 font-medium">
-                                        {trekDetails.startDate}
-                                        {trekDetails.endDate}
-                                    </span>
-                                    <span className="text-gray-600 font-medium">
-                                        {trekDetails.difficulty}
+                                    <span className="bg-green-100 text-green-800 px-3 py-1 text-sm font-medium rounded-full">
+                                        {new Date(
+                                            trekDetails.startDate
+                                        ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                        })}{" "}
+                                        {"to"}{" "}
+                                        {new Date(
+                                            trekDetails.endDate
+                                        ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                        })}
                                     </span>
                                 </div>
 
