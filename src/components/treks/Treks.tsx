@@ -233,7 +233,7 @@ export default function TreksPage() {
                         </h2>
                         <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
                             Don&apos;t see the perfect trek? Contact us to create a
-                            custom adventure tailored just for you.
+                            custom adventure tailored just for you and your group.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <button className="group px-8 py-4 bg-white text-emerald-700 font-semibold rounded-full shadow-2xl hover:shadow-white/20 transform hover:scale-105 transition-all duration-300 min-w-[200px]">

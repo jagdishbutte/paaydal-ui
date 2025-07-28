@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 // import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
-import { Mountain } from "lucide-react";
+import { Eye, Mountain } from "lucide-react";
 import Modal from "../common/Modal";
 
 type TrekCardProps = {
@@ -166,22 +166,10 @@ export default function TrekCard({
                         <div className="flex gap-3 pt-2">
                             <Link
                                 href={`/treks/${_id}`}
-                                className="group/btn flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white/90 hover:bg-white text-emerald-700 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg backdrop-blur-sm"
+                                className="group/btn flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-stone-50 to-stone-100 hover:bg-white text-emerald-700 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg backdrop-blur-sm"
                             >
+                                <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
                                 <span className="text-sm">View Details</span>
-                                <svg
-                                    className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                                    />
-                                </svg>
                             </Link>
 
                             <button

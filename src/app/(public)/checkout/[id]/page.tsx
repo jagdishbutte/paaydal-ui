@@ -2,11 +2,12 @@ import CheckoutPage from '@/components/checkout/CheckOutPage'
 import React from 'react'
 
 type Props = {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 };
 
-export default function Page({ params }: Props) {
-    return <CheckoutPage trekId={params.id} />;
+export default async function Page({ params }: Props) {
+    const { id } = await params;
+    return <CheckoutPage trekId={id} />;
 }

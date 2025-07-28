@@ -199,9 +199,9 @@ export default function UpcomingTreks() {
                             </p>
                             <button className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
                                 <span className="relative z-10 flex items-center gap-2">
-                                    Request for Trek
+                                    Request for custom plan
                                     <svg
-                                        className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+                                        className="w-5 h-5 group-hover:rotate-6 transition-transform duration-300"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -210,7 +210,7 @@ export default function UpcomingTreks() {
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
                                             strokeWidth={2}
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
                                         />
                                     </svg>
                                 </span>

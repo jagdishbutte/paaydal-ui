@@ -114,19 +114,6 @@ export default function MyBookingsPage() {
         }
     };
 
-    // Calculate stats
-    const totalBookings = bookings.length;
-    const confirmedBookings = bookings.filter(
-        (b) => b.status.toLowerCase() === "confirmed"
-    ).length;
-    const totalSpent = bookings.reduce(
-        (sum, booking) => sum + booking.amountPaid,
-        0
-    );
-    const pendingBookings = bookings.filter(
-        (b) => b.status.toLowerCase() === "pending"
-    ).length;
-
     // Loading Component
     const LoadingCard = () => (
         <div className="animate-pulse bg-white rounded-2xl overflow-hidden shadow-lg">
@@ -156,11 +143,6 @@ export default function MyBookingsPage() {
                     }}
                 />
             </div>
-
-            {/* Floating Elements */}
-            <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-emerald-200/20 to-teal-300/20 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute top-40 right-16 w-24 h-24 bg-gradient-to-br from-cyan-200/20 to-blue-300/20 rounded-full blur-2xl animate-pulse delay-1000" />
-            <div className="absolute bottom-32 left-1/4 w-40 h-40 bg-gradient-to-br from-teal-200/20 to-emerald-300/20 rounded-full blur-3xl animate-pulse delay-2000" />
 
             <div className="relative z-10 py-12 px-4 md:px-8">
                 <div className="max-w-7xl mx-auto">
@@ -196,44 +178,6 @@ export default function MyBookingsPage() {
                             </span>
                             .
                         </p>
-
-                        {/* Stats Dashboard */}
-                        {!loading && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
-                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-lg">
-                                    <div className="text-2xl font-bold text-emerald-600 mb-1">
-                                        {totalBookings}
-                                    </div>
-                                    <div className="text-sm text-gray-600 font-medium">
-                                        Total Bookings
-                                    </div>
-                                </div>
-                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-lg">
-                                    <div className="text-2xl font-bold text-green-600 mb-1">
-                                        {confirmedBookings}
-                                    </div>
-                                    <div className="text-sm text-gray-600 font-medium">
-                                        Confirmed
-                                    </div>
-                                </div>
-                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-lg">
-                                    <div className="text-2xl font-bold text-yellow-600 mb-1">
-                                        {pendingBookings}
-                                    </div>
-                                    <div className="text-sm text-gray-600 font-medium">
-                                        Pending
-                                    </div>
-                                </div>
-                                <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/20 shadow-lg">
-                                    <div className="text-2xl font-bold text-indigo-600 mb-1">
-                                        ₹{totalSpent.toLocaleString()}
-                                    </div>
-                                    <div className="text-sm text-gray-600 font-medium">
-                                        Total Spent
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                     </div>
 
                     {/* Controls Section */}
@@ -290,7 +234,7 @@ export default function MyBookingsPage() {
 
                     {/* Content Section */}
                     {loading ? (
-                        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                             {[...Array(6)].map((_, i) => (
                                 <LoadingCard key={i} />
                             ))}
@@ -334,7 +278,7 @@ export default function MyBookingsPage() {
                             </div>
 
                             {/* Bookings Grid */}
-                            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            <div className="grid gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                                 {filteredBookings.map((booking, index) => (
                                     <div
                                         key={booking._id}

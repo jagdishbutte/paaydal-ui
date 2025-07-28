@@ -15,6 +15,7 @@ import {
     CheckCircle,
     Clock,
 } from "lucide-react";
+import Modal from "../common/Modal";
 
 interface BookingCardProps {
     booking: {
@@ -103,7 +104,8 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
     };
 
     const handleViewDetails = () => {
-        router.push(`/treks/${booking.trekId._id}`);
+        console.log("View details for booking:", booking._id);
+        router.push(`/treks/${booking._id}`);
     };
 
     const formattedTrekDate = format(
@@ -128,10 +130,10 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                     />
 
                     {/* Enhanced Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/70 transition-all duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/70 transition-all duration-300 pointer-events-none" />
 
                     {/* Subtle shine effect on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none" />
                 </div>
 
                 {/* Status Badge */}
@@ -223,7 +225,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                     <div className="flex gap-3 pt-4">
                         <button
                             onClick={handleViewDetails}
-                            className="group/btn flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                            className="group/btn flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-stone-50 to-stone-100 hover:bg-white/50 text-emerald-700 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
                         >
                             <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
                             <span>View Details</span>
@@ -242,89 +244,81 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                 </div>
 
                 {/* Hover effect border */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-400/50 transition-all duration-300" />
+                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-400/50 transition-all duration-300 pointer-events-none" />
             </div>
 
-            {/* Enhanced Cancel Confirmation Modal */}
+            {/* Cancel Confirmation Modal */}
             {showCancelModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-                    <div className="bg-white rounded-2xl p-8 w-full max-w-md text-center shadow-2xl transform animate-scale-in border border-gray-100">
-                        {/* Modal Header */}
-                        <div className="mb-6">
-                            <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                <AlertCircle className="w-8 h-8 text-red-600" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                                Cancel Booking?
-                            </h3>
-                            <p className="text-gray-600">
-                                Are you sure you want to cancel this trek
-                                booking?
-                            </p>
+                <Modal onClose={() => setShowCancelModal(false)}>
+                    <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <AlertCircle className="w-8 h-8 text-red-600" />
                         </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                            Cancel Booking?
+                        </h3>
+                        <p className="text-gray-600">
+                            Are you sure you want to cancel this trek booking?
+                        </p>
+                    </div>
 
-                        {/* Booking Details */}
-                        <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-4 mb-6 border border-red-100">
-                            <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">
-                                {booking.trekId.title}
-                            </h4>
-                            <div className="grid grid-cols-2 gap-3 text-sm">
-                                <div className="text-center">
-                                    <div className="text-gray-500 text-xs">
-                                        Trek Date
-                                    </div>
-                                    <div className="font-semibold text-gray-900">
-                                        {formattedTrekDate}
-                                    </div>
+                    <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-4 mb-6 border border-red-100">
+                        <h4 className="font-semibold text-gray-900 mb-3 line-clamp-2">
+                            {booking.trekId.title}
+                        </h4>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div className="text-center">
+                                <div className="text-gray-500 text-xs">
+                                    Trek Date
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-gray-500 text-xs">
-                                        Amount
-                                    </div>
-                                    <div className="font-semibold text-red-600">
-                                        ₹{booking.amountPaid.toLocaleString()}
-                                    </div>
+                                <div className="font-semibold text-gray-900">
+                                    {formattedTrekDate}
                                 </div>
                             </div>
-                        </div>
-
-                        {/* Warning Notice */}
-                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6">
-                            <p className="text-amber-800 text-sm font-medium">
-                                ⚠️ Cancellation may incur charges as per our
-                                policy
-                            </p>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-4">
-                            <button
-                                onClick={() => setShowCancelModal(false)}
-                                disabled={isCancelling}
-                                className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50"
-                            >
-                                Keep Booking
-                            </button>
-                            <button
-                                onClick={handleConfirmCancel}
-                                disabled={isCancelling}
-                                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none flex items-center justify-center gap-2"
-                            >
-                                {isCancelling ? (
-                                    <>
-                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                        <span>Cancelling...</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <X className="w-4 h-4" />
-                                        <span>Yes, Cancel</span>
-                                    </>
-                                )}
-                            </button>
+                            <div className="text-center">
+                                <div className="text-gray-500 text-xs">
+                                    Amount
+                                </div>
+                                <div className="font-semibold text-red-600">
+                                    ₹{booking.amountPaid.toLocaleString()}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6">
+                        <p className="text-amber-800 text-sm font-medium">
+                            ⚠️ Cancellation may incur charges as per our policy
+                        </p>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <button
+                            onClick={() => setShowCancelModal(false)}
+                            disabled={isCancelling}
+                            className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50"
+                        >
+                            Keep Booking
+                        </button>
+                        <button
+                            onClick={handleConfirmCancel}
+                            disabled={isCancelling}
+                            className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none flex items-center justify-center gap-2"
+                        >
+                            {isCancelling ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span>Cancelling...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <X className="w-4 h-4" />
+                                    <span>Yes, Cancel</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                </Modal>
             )}
 
             <style jsx>{`
