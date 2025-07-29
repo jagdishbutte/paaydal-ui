@@ -21,3 +21,8 @@ export const trekBookings = {
     CREATE_BOOKING: `${BASE_URL}api/bookings/book-trek`,
     GET_USER_BOOKINGS: `${BASE_URL}api/bookings/my-bookings`,
 };
+
+export const paymentAPIs = {
+    CREATE_ORDER: `${BASE_URL}api/payments/create-order`,
+    VERYFY_PAYMENT: `${BASE_URL}api/payments/verify-payment`,
+}
