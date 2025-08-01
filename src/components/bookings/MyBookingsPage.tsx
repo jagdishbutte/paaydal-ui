@@ -12,6 +12,7 @@ import {
     Filter,
     Search,
 } from "lucide-react";
+import Link from "next/link";
 
 interface Booking {
     _id: string;
@@ -26,6 +27,9 @@ interface Booking {
     paymentStatus: string;
     status: string;
     createdAt: string;
+    groupType: string;
+    adultCount: number;
+    childCount: number;
 }
 
 export default function MyBookingsPage() {
@@ -257,7 +261,7 @@ export default function MyBookingsPage() {
                             {bookings.length === 0 && (
                                 <button className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                                     <MapPin className="w-5 h-5" />
-                                    <span>Explore Treks</span>
+                                    <Link href="/treks">Explore Treks</Link>
                                 </button>
                             )}
                         </div>

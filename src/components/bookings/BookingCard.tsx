@@ -14,6 +14,8 @@ import {
     AlertCircle,
     CheckCircle,
     Clock,
+    User,
+    Users,
 } from "lucide-react";
 import Modal from "../common/Modal";
 
@@ -28,6 +30,9 @@ interface BookingCardProps {
             startDate: string;
         };
         amountPaid: number;
+        groupType: string;
+        adultCount: number;
+        childCount: number;
         paymentStatus: string;
         status: string;
         createdAt: string;
@@ -104,8 +109,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
     };
 
     const handleViewDetails = () => {
-        console.log("View details for booking:", booking._id);
-        router.push(`/treks/${booking._id}`);
+        router.push(`/treks/${booking.trekId._id}`);
     };
 
     const formattedTrekDate = format(
@@ -195,7 +199,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                             <CreditCard className="w-4 h-4 text-emerald-500" />
                             <div>
                                 <div className="font-medium text-gray-500 text-xs">
-                                    Payment
+                                    Amount paid
                                 </div>
                                 <div
                                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(
@@ -216,6 +220,32 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                                 </div>
                                 <div className="font-semibold text-gray-900">
                                     {formattedBookingDate}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* No. of Adults */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <User className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    No. of Adults
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    {booking.adultCount}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* No. of Children */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Users className="w-4 h-4 text-emerald-500" />
+                            <div>
+                                <div className="font-medium text-gray-500 text-xs">
+                                    No. of Children
+                                </div>
+                                <div className="font-semibold text-gray-900">
+                                    {booking.childCount || 0}
                                 </div>
                             </div>
                         </div>

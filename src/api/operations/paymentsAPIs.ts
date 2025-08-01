@@ -32,7 +32,12 @@ export const verifyPayment = async (
     token: string,
     paymentId: string,
     orderId: string,
-    signature: string
+    signature: string,
+    trekId: string,
+    totalAmount: number,
+    groupType: string,
+    adults: number,
+    children: number
 ) => {
     try {
         const response = await apiConnector(
@@ -42,6 +47,11 @@ export const verifyPayment = async (
                 razorpay_payment_id: paymentId,
                 razorpay_order_id: orderId,
                 razorpay_signature: signature,
+                trekId,
+                totalAmount,
+                groupType,
+                adultCount : adults,
+                childCount: children,
             },
             {
                 Authorization: `Bearer ${token}`,
