@@ -4,9 +4,9 @@ import Image from "next/image";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
-// import { useAuthStore } from "@/stores/authStore";
+import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
-import { Eye, Mountain } from "lucide-react";
+import { Eye, Mountain, LogIn } from "lucide-react";
 import Modal from "../common/Modal";
 
 type TrekCardProps = {
@@ -95,7 +95,30 @@ export default function TrekCard({
     )}`;
     const router = useRouter();
     const [showModal, setShowModal] = useState(false);
-    // const token = useAuthStore((state) => state.user?.token);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+    // Get authentication state
+    const user = useAuthStore((state) => state.user);
+    const isAuthenticated = useAuthStore((state) => !!state.user?.token);
+
+    const handleBookingClick = () => {
+        if (!isAuthenticated) {
+            setShowLoginPrompt(true);
+        } else {
+            setShowModal(true);
+        }
+    };
+
+    const handleProceedToCheckout = () => {
+        setShowModal(false);
+        router.push(`/checkout/${_id}`);
+    };
+
+    const handleLoginRedirect = () => {
+        setShowLoginPrompt(false);
+        sessionStorage.setItem("redirectAfterLogin", `/checkout/${_id}`);
+        router.push("/login");
+    };
 
     return (
         <>
@@ -173,7 +196,7 @@ export default function TrekCard({
                             </Link>
 
                             <button
-                                onClick={() => setShowModal(true)}
+                                onClick={handleBookingClick}
                                 className="group/btn flex items-center justify-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
                             >
                                 <span className="text-sm">Book</span>
@@ -199,8 +222,59 @@ export default function TrekCard({
                 <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-emerald-400/50 transition-all duration-300" />
             </div>
 
-            {/* Booking Modal */}
-            {showModal && (
+            {/* Login Prompt Modal */}
+            {showLoginPrompt && (
+                <Modal onClose={() => setShowLoginPrompt(false)}>
+                    <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <LogIn className="w-8 h-8 text-white" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                            Login Required
+                        </h3>
+                        <p className="text-gray-600">
+                            Please login to book{" "}
+                            <span className="font-semibold text-emerald-600">
+                                {title}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-4 mb-6">
+                        <div className="flex justify-center gap-2 items-center mb-2">
+                            <span className="text-gray-700">
+                                Starting Price:
+                            </span>
+                            <span className="text-xl font-bold text-emerald-600">
+                                ₹{price}
+                            </span>
+                        </div>
+                        <p className="text-sm text-gray-500 text-center">
+                            Sign in to continue with your booking
+                        </p>
+                    </div>
+
+                    <div className="space-y-3">
+                        <button
+                            onClick={handleLoginRedirect}
+                            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
+                        >
+                            Login to Continue
+                            <LogIn className="w-5 h-5" />
+                        </button>
+
+                        <button
+                            onClick={() => setShowLoginPrompt(false)}
+                            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-6 rounded-xl font-semibold transition-all duration-300"
+                        >
+                            Maybe Later
+                        </button>
+                    </div>
+                </Modal>
+            )}
+
+            {/* Booking Modal - Only shown for authenticated users */}
+            {showModal && isAuthenticated && (
                 <Modal onClose={() => setShowModal(false)}>
                     <div className="text-center mb-6">
                         <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -210,7 +284,8 @@ export default function TrekCard({
                             Ready for Your Adventure?
                         </h3>
                         <p className="text-gray-600">
-                            Let&apos;s get you booked for{" "}
+                            Welcome back, {user?.name || "Trekker"}! Let&apos;s
+                            get you booked for{" "}
                             <span className="font-semibold text-emerald-600">
                                 {title}
                             </span>
@@ -233,10 +308,7 @@ export default function TrekCard({
 
                     <div className="space-y-3">
                         <button
-                            onClick={() => {
-                                setShowModal(false);
-                                router.push(`/checkout/${_id}`);
-                            }}
+                            onClick={handleProceedToCheckout}
                             className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105 flex items-center justify-center gap-2"
                         >
                             Proceed to Checkout

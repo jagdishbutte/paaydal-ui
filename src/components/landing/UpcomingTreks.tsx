@@ -4,20 +4,19 @@ import { useEffect, useState } from "react";
 import { getAllTreks } from "@/api/operations/trekAPIs";
 import TrekCard from "../treks/TrekCard";
 import { Trek } from "@/lib/dummyTreks";
-import { useAuthStore } from "@/stores/authStore";
+// import { useAuthStore } from "@/stores/authStore";
 
 export default function UpcomingTreks() {
-    const token = useAuthStore((state) => state.user?.token);
+    // const token = useAuthStore((state) => state.user?.token);
     const [upcomingTreks, setUpcomingTreks] = useState<Trek[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!token) return;
 
         const fetchTreks = async () => {
             setLoading(true);
             try {
-                const response = await getAllTreks(token);
+                const response = await getAllTreks();
                 const allTreks = response.data || [];
                 setUpcomingTreks(
                     allTreks.filter(
@@ -34,7 +33,7 @@ export default function UpcomingTreks() {
         };
 
         fetchTreks();
-    }, [token]);
+    }, []);
 
     return (
         <section className="relative bg-gradient-to-br from-gray-50 via-white to-emerald-50/30 py-6 sm:py-8 lg:py-4 overflow-hidden">

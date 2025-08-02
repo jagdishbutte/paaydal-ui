@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getTrekById } from "@/api/operations/trekAPIs";
-import { useAuthStore } from "@/stores/authStore";
+// import { useAuthStore } from "@/stores/authStore";
 // import toast from "react-hot-toast";
 // import { userTrekBooking } from "@/api/operations/bookingAPIs";
 
@@ -54,16 +54,15 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
     const [trek, setTrek] = useState<Trek | null>(null);
     const [loading, setLoading] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const token = useAuthStore((state) => state.user?.token);
+    // const token = useAuthStore((state) => state.user?.token);
     const [showModal, setShowModal] = useState(false);
 
 
     useEffect(() => {
-        if (!token) return;
 
         const fetchTrek = async () => {
             try {
-                const response = await getTrekById(token, trekId);
+                const response = await getTrekById(trekId);
                 setTrek(response.data);
                 console.log("Fetched trek data:", response.data);
             } catch (err) {
@@ -73,7 +72,7 @@ export default function TrekDetails({ trekId }: { trekId: string }) {
             }
         };
         fetchTrek();
-    }, [token, trekId]);
+    }, [trekId]);
 
     useEffect(() => {
         if (!trek?.imageUrls?.length) return;

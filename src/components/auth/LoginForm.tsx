@@ -29,25 +29,34 @@ export default function LoginForm() {
             if (response.status === 200) {
                 toast.success("Login successful!");
                 const user = response.data.user;
-                // console.log("User data:", user);
 
                 setUser(user);
-                
+
                 setTimeout(() => {
-                    if (user.role === "leader") {
-                        router.push("/leader");
-                    } else if (user.role === "admin") {
-                        router.push("/admin");
+                    // Check for redirect URL first
+                    const redirectUrl =
+                        sessionStorage.getItem("redirectAfterLogin");
+
+                    if (redirectUrl) {
+                        // Clear the stored URL
+                        sessionStorage.removeItem("redirectAfterLogin");
+                        // Redirect to the intended page
+                        router.push(redirectUrl);
                     } else {
-                        router.push("/");
+                        // Default role-based redirects
+                        if (user.role === "leader") {
+                            router.push("/leader");
+                        } else if (user.role === "admin") {
+                            router.push("/admin");
+                        } else {
+                            router.push("/");
+                        }
                     }
                 }, 100);
             }
         } catch (error: unknown) {
             console.error("Login failed:", error);
-            toast.error(
-                "Please check your credentials."
-            );
+            toast.error("Please check your credentials.");
         }
     };
 

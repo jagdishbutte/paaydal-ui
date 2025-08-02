@@ -43,7 +43,7 @@ export default function CheckoutPage({ trekId }: { trekId: string }) {
     const handleBackClick = () => setShowCancelModal(true);
     const handleConfirmLeave = () => {
         setShowCancelModal(false);
-        router.back();
+        router.push("/treks");
     };
     const handleStayOnPage = () => setShowCancelModal(false);
     const handleSuccessRedirect = () => setShowSuccessModal(true);
@@ -52,8 +52,15 @@ export default function CheckoutPage({ trekId }: { trekId: string }) {
         handlePayment();
     };
 
+   useEffect(() => {
+       if (!token || !user) {
+           sessionStorage.setItem("redirectAfterLogin", `/checkout/${trekId}`);
+           router.push("/login");
+       }
+   }, [router, token, user, trekId]);
+
     useEffect(() => {
-        if (!trekId || !token) {
+        if (!trekId) {
             setIsLoading(false);
             setError("Missing trek ID or authentication token");
             return;
@@ -63,7 +70,7 @@ export default function CheckoutPage({ trekId }: { trekId: string }) {
             try {
                 setIsLoading(true);
                 setError(null);
-                const res = await getTrekById(token, trekId);
+                const res = await getTrekById(trekId);
                 setTrekDetails(res.data);
             } catch (err) {
                 console.error("Error fetching trek:", err);

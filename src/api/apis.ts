@@ -26,3 +26,8 @@ export const paymentAPIs = {
     CREATE_ORDER: `${BASE_URL}api/payments/create-order`,
     VERYFY_PAYMENT: `${BASE_URL}api/payments/verify-payment`,
 }
+
+export const profileAPIs = {
+    GET_USER_PROFILE: `${BASE_URL}api/profile/get-user-profile`,
+    UPDATE_USER_PROFILE: `${BASE_URL}api/profile/update-user-profile`,
+}

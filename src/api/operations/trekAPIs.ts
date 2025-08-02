@@ -54,17 +54,13 @@ export const createNewTrek = async (
 };
 
 export const getAllTreks = async (
-    token: string
 ) => {
     try {
         const response = await apiConnector(
             "GET",
             userTrek.GET_ALL_TREKS,
             null,
-            {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+            null,
             null,
             "json"
         );
@@ -77,7 +73,6 @@ export const getAllTreks = async (
 }
 
 export const getTrekById = async (
-    token: string,
     trekId: string,
 ) => {
     try {
@@ -85,10 +80,7 @@ export const getTrekById = async (
             "GET",
             userTrek.GET_TREK_BY_ID(trekId),
             null,
-            {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
+            null,
             null,
             "json"
         );
