@@ -30,7 +30,7 @@ export default function TreksPage() {
                 return;
             }
             try {
-                const response = await getAllTreks(token);
+                const response = await getAllTreks();
                 const allTreks = response.data || [];
 
                 setUpcomingTreks(
