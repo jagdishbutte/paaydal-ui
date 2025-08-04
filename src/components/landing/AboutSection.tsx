@@ -201,13 +201,13 @@ export default function AboutSection() {
                             {/* Achievement Badge */}
                             <div className="absolute -bottom-4 -right-4 bg-white rounded-2xl p-4 shadow-xl border border-emerald-100 animate-bounce-subtle">
                                 <div className="text-center">
-                                    <div className="text-2xl font-bold text-emerald-600">
-                                        4.9
+                                    <div className="text-md font-bold text-emerald-600">
+                                        100% Safety
                                     </div>
                                     <div className="text-xs text-gray-600 mt-1">
-                                        Rating
+                                        Track Record
                                     </div>
-                                    <div className="flex justify-center mt-1">
+                                    <div className="flex justify-center mt-2">
                                         {[1, 2, 3, 4, 5].map((star) => (
                                             <svg
                                                 key={star}

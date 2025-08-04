@@ -85,7 +85,7 @@ export default function HeroSection() {
 
                 {/* Enhanced CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up delay-700">
-                    <Link href="/treks">
+                    <a href="#treks-section">
                         <button className="group relative px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 text-base min-w-[180px]">
                             <span className="relative z-10 flex items-center justify-center gap-2">
                                 View Treks
@@ -105,7 +105,7 @@ export default function HeroSection() {
                             </span>
                             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
                         </button>
-                    </Link>
+                    </a>
 
                     <Link href="/forum">
                         <button className="group relative px-6 py-3 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white font-semibold rounded-full shadow-2xl border border-white/30 hover:border-white/50 transform hover:scale-105 transition-all duration-300 text-base min-w-[180px]">

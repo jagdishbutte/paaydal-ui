@@ -232,46 +232,31 @@ export default function TreksPage() {
                             Ready for Your Next Adventure?
                         </h2>
                         <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
-                            Don&apos;t see the perfect trek? Contact us to create a
-                            custom adventure tailored just for you and your group.
+                            Don&apos;t see the perfect trek? Contact us to
+                            create a custom adventure tailored just for you and
+                            your group.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <button className="group px-8 py-4 bg-white text-emerald-700 font-semibold rounded-full shadow-2xl hover:shadow-white/20 transform hover:scale-105 transition-all duration-300 min-w-[200px]">
-                                <span className="flex items-center justify-center gap-2">
-                                    Plan Custom Trek
-                                    <svg
-                                        className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                        />
-                                    </svg>
-                                </span>
-                            </button>
-                            <button className="group px-8 py-4 bg-emerald-800/50 backdrop-blur-sm text-white font-semibold rounded-full border-2 border-white/30 hover:border-white/50 hover:bg-emerald-800/70 transition-all duration-300 min-w-[200px]">
-                                <span className="flex items-center justify-center gap-2">
-                                    Contact Us
-                                    <svg
-                                        className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                        />
-                                    </svg>
-                                </span>
-                            </button>
+                            <a href="tel:+919763810639">
+                                <button className="group px-8 py-4 bg-emerald-800/50 backdrop-blur-sm text-white font-semibold rounded-full border-2 border-white/30 hover:border-white/50 hover:bg-emerald-800/70 transition-all duration-300 min-w-[200px]">
+                                    <span className="flex items-center justify-center gap-2">
+                                        Contact Us
+                                        <svg
+                                            className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                            />
+                                        </svg>
+                                    </span>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>

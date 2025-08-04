@@ -34,7 +34,7 @@ interface BookingCardProps {
         adultCount: number;
         childCount: number;
         paymentStatus: string;
-        status: string;
+        bookingStatus: string;
         createdAt: string;
     };
     onCancel: (bookingId: string) => void;
@@ -42,44 +42,28 @@ interface BookingCardProps {
 
 const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-        case "confirmed":
-        case "paid":
-            return "from-green-400 to-emerald-500";
-        case "pending":
-        case "processing":
-            return "from-yellow-400 to-orange-500";
+        case "confirmed": 
+            return "from-emerald-500 to-teal-600";
         case "cancelled":
-        case "failed":
-            return "from-red-400 to-red-600";
-        default:
-            return "from-gray-400 to-gray-600";
+            return "from-red-500 to-red-600";
     }
 };
 
 const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
         case "confirmed":
-        case "paid":
-            return <CheckCircle className="w-3 h-3" />;
-        case "pending":
-        case "processing":
-            return <Clock className="w-3 h-3" />;
+            return <CheckCircle className="w-4 h-4" />;
         case "cancelled":
-        case "failed":
-            return <AlertCircle className="w-3 h-3" />;
+            return <X className="w-4 h-4" />;
         default:
-            return <AlertCircle className="w-3 h-3" />;
+            return <AlertCircle className="w-4 h-4" />;
     }
 };
 
 const getPaymentStatusColor = (paymentStatus: string) => {
     switch (paymentStatus.toLowerCase()) {
         case "paid":
-        case "completed":
             return "text-emerald-600 bg-emerald-50";
-        case "pending":
-            return "text-yellow-600 bg-yellow-50";
-        case "failed":
         case "cancelled":
             return "text-red-600 bg-red-50";
         default:
@@ -99,7 +83,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
     const handleConfirmCancel = async () => {
         setIsCancelling(true);
         try {
-            await onCancel(booking.trekId._id);
+            await onCancel(booking._id);
             setShowCancelModal(false);
         } catch (error) {
             console.error("Cancel error:", error);
@@ -144,11 +128,11 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                 <div className="absolute top-4 left-4 z-20">
                     <div
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${getStatusColor(
-                            booking.status
+                            booking.bookingStatus
                         )} shadow-lg backdrop-blur-sm border border-white/20`}
                     >
-                        {getStatusIcon(booking.status)}
-                        <span className="capitalize">{booking.status}</span>
+                        {getStatusIcon(booking.bookingStatus)}
+                        <span className="capitalize">{booking.bookingStatus}</span>
                     </div>
                 </div>
 
@@ -199,7 +183,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                             <CreditCard className="w-4 h-4 text-emerald-500" />
                             <div>
                                 <div className="font-medium text-gray-500 text-xs">
-                                    Amount paid
+                                    Payment status
                                 </div>
                                 <div
                                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusColor(
@@ -261,7 +245,7 @@ export default function BookingCard({ booking, onCancel }: BookingCardProps) {
                             <span>View Details</span>
                         </button>
 
-                        {booking.status.toLowerCase() !== "cancelled" && (
+                        {booking.bookingStatus.toLowerCase() !== "cancelled" && (
                             <button
                                 onClick={handleCancelClick}
                                 className="group/btn flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"

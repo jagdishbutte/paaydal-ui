@@ -49,3 +49,26 @@ export const getUserBookings = async (
         throw error;
     }
 };
+
+export const cancelBooking = async (
+    token: string,
+    bookingId: string,
+) => {
+    try {
+        const res = await apiConnector(
+            "PATCH",
+            trekBookings.CANCEL_BOOKING(bookingId),
+            {},
+            {
+                Authorization: `Bearer ${token}`,
+            },
+            null,
+            null
+        );
+        const response = res;
+        return response;
+    } catch (error: unknown) {
+        console.log("Some error occured : ", error);
+        throw error;
+    }
+};

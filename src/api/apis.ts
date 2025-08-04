@@ -20,6 +20,7 @@ export const userTrek = {
 export const trekBookings = {
     CREATE_BOOKING: `${BASE_URL}api/bookings/book-trek`,
     GET_USER_BOOKINGS: `${BASE_URL}api/bookings/my-bookings`,
+    CANCEL_BOOKING: (bookingId: string) => `${BASE_URL}api/bookings/cancel-booking/${bookingId}`,
 };
 
 export const paymentAPIs = {

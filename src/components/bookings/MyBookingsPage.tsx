@@ -4,13 +4,10 @@ import { useEffect, useState } from "react";
 import BookingCard from "@/components/bookings/BookingCard";
 import { useAuthStore } from "@/stores/authStore";
 import { toast } from "react-hot-toast";
-import { getUserBookings } from "@/api/operations/bookingAPIs";
+import { cancelBooking, getUserBookings } from "@/api/operations/bookingAPIs";
 import {
     Calendar,
     MapPin,
-    RefreshCw,
-    Filter,
-    Search,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -25,7 +22,7 @@ interface Booking {
     };
     amountPaid: number;
     paymentStatus: string;
-    status: string;
+    bookingStatus: string;
     createdAt: string;
     groupType: string;
     adultCount: number;
@@ -36,14 +33,12 @@ export default function MyBookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all");
     const token = useAuthStore((state) => state.user?.token);
 
     useEffect(() => {
         const fetchBookings = async () => {
             if (!token) {
-                toast.error("You need to be logged in to view bookings");
+                toast.loading("Fetching bookings...");
                 setLoading(false);
                 return;
             }
@@ -51,6 +46,8 @@ export default function MyBookingsPage() {
                 const res = await getUserBookings(token || "");
                 const bookingsData = res.data.bookings || [];
                 setBookings(bookingsData);
+                toast.dismiss();
+                toast.success("Bookings fetched successfully");
                 setFilteredBookings(bookingsData);
             } catch (err) {
                 toast.error("Failed to fetch bookings");
@@ -62,33 +59,14 @@ export default function MyBookingsPage() {
         fetchBookings();
     }, [token]);
 
-    // Filter bookings based on search and status
-    useEffect(() => {
-        let filtered = bookings;
-
-        // Search filter
-        if (searchTerm) {
-            filtered = filtered.filter((booking) =>
-                booking.trekId.title
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
-            );
-        }
-
-        // Status filter
-        if (statusFilter !== "all") {
-            filtered = filtered.filter(
-                (booking) =>
-                    booking.status.toLowerCase() === statusFilter.toLowerCase()
-            );
-        }
-
-        setFilteredBookings(filtered);
-    }, [bookings, searchTerm, statusFilter]);
-
     const handleCancelBooking = async (bookingId: string) => {
+        if (!token || !bookingId) {
+            toast.error("You need to be logged in to cancel bookings");
+            return;
+        }
+
         try {
-            // const response = await cancelUserBooking(bookingId);
+            await cancelBooking(token, bookingId);
             toast.success("Booking cancelled successfully");
             setBookings((prev) =>
                 prev.map((booking) =>
@@ -100,21 +78,6 @@ export default function MyBookingsPage() {
         } catch (err) {
             toast.error("Cancellation failed");
             console.error(err);
-        }
-    };
-
-    const refreshBookings = async () => {
-        setLoading(true);
-        try {
-            const res = await getUserBookings(token || "");
-            const bookingsData = res.data.bookings || [];
-            setBookings(bookingsData);
-            setFilteredBookings(bookingsData);
-            toast.success("Bookings refreshed");
-        } catch {
-            toast.error("Failed to refresh bookings");
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -184,58 +147,6 @@ export default function MyBookingsPage() {
                         </p>
                     </div>
 
-                    {/* Controls Section */}
-                    {!loading && bookings.length > 0 && (
-                        <div className="flex flex-col md:flex-row gap-4 mb-8 max-w-4xl mx-auto">
-                            {/* Search Bar */}
-                            <div className="relative flex-1">
-                                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input
-                                    type="text"
-                                    placeholder="Search by trek name..."
-                                    value={searchTerm}
-                                    onChange={(e) =>
-                                        setSearchTerm(e.target.value)
-                                    }
-                                    className="w-full pl-12 pr-4 py-3 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 shadow-lg"
-                                />
-                            </div>
-
-                            {/* Status Filter */}
-                            <div className="relative">
-                                <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) =>
-                                        setStatusFilter(e.target.value)
-                                    }
-                                    className="pl-12 pr-8 py-3 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 shadow-lg appearance-none cursor-pointer"
-                                >
-                                    <option value="all">All Status</option>
-                                    <option value="confirmed">Confirmed</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
-
-                            {/* Refresh Button */}
-                            <button
-                                onClick={refreshBookings}
-                                disabled={loading}
-                                className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none"
-                            >
-                                <RefreshCw
-                                    className={`w-4 h-4 transition-transform duration-300 ${
-                                        loading
-                                            ? "animate-spin"
-                                            : "group-hover:rotate-180"
-                                    }`}
-                                />
-                                <span>Refresh</span>
-                            </button>
-                        </div>
-                    )}
-
                     {/* Content Section */}
                     {loading ? (
                         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
@@ -272,12 +183,6 @@ export default function MyBookingsPage() {
                                 <p className="text-gray-600 font-medium">
                                     Showing {filteredBookings.length} of{" "}
                                     {bookings.length} bookings
-                                    {searchTerm && (
-                                        <span className="text-emerald-600">
-                                            {" "}
-                                            for &quot;{searchTerm}&quot;
-                                        </span>
-                                    )}
                                 </p>
                             </div>
 

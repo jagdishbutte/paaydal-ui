@@ -63,18 +63,22 @@ export default function Footer() {
                 {/* Contact Info */}
                 <div className="flex flex-col items-center text-center">
                     <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-                    <ul className="text-sm space-y-2 text-stone-400">
-                        <li className="flex items-center justify-center gap-1">
-                            {" "}
-                            <Mail className="w-4 h-4" />
-                            <span>info@foxtrailindia.in</span>
-                        </li>
-                        <li className="flex items-center justify-center gap-1">
-                            {" "}
-                            <Phone className="w-4 h-4" />
-                            <span>+91 98765 43210</span>
-                        </li>
-                    </ul>
+                    <div className="flex flex-col text-sm space-y-2 text-stone-400">
+                        <a href="mailto:foxtrailindiaadventures@gmail.com">
+                            <span className="flex items-center justify-center gap-1">
+                                {" "}
+                                <Mail className="w-4 h-4" />
+                                <span>info@foxtrailindia.in</span>
+                            </span>
+                        </a>
+                        <a href="tel:+919763810639">
+                            <span className="flex items-center justify-center gap-1">
+                                {" "}
+                                <Phone className="w-4 h-4" />
+                                <span>+91 97638 10639</span>
+                            </span>
+                        </a>
+                    </div>
                 </div>
 
                 {/* Social Links */}

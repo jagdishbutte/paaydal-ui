@@ -36,7 +36,10 @@ export default function UpcomingTreks() {
     }, []);
 
     return (
-        <section className="relative bg-gradient-to-br from-gray-50 via-white to-emerald-50/30 py-6 sm:py-8 lg:py-4 overflow-hidden">
+        <section
+            id="treks-section"
+            className="relative bg-gradient-to-br from-gray-50 via-white to-emerald-50/30 py-6 sm:py-8 lg:py-4 overflow-hidden"
+        >
             {/* Subtle background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-20 left-1/4 w-64 h-64 bg-emerald-400 rounded-full blur-3xl"></div>
@@ -196,25 +199,27 @@ export default function UpcomingTreks() {
                             <p className="text-gray-600 mb-6 text-lg">
                                 Can&apos;t find the perfect adventure?
                             </p>
-                            <button className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
-                                <span className="relative z-10 flex items-center gap-2">
-                                    Request for custom plan
-                                    <svg
-                                        className="w-5 h-5 group-hover:rotate-6 transition-transform duration-300"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
-                                        />
-                                    </svg>
-                                </span>
-                                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
-                            </button>
+                            <a href="tel:+919763810639">
+                                <button className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-semibold rounded-full shadow-xl transform hover:scale-105 transition-all duration-300">
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        Request for custom plan
+                                        <svg
+                                            className="w-5 h-5 group-hover:rotate-6 transition-transform duration-300"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-emerald-400 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></div>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 )}
